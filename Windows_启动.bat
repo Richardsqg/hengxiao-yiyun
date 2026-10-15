@@ -13,11 +13,17 @@ if errorlevel 1 (
  pause
  exit /b 1
 )
-if not exist data\config.json node scripts\configure.mjs
+set "LOCAL_PREVIEW=1"
+set "HOST=127.0.0.1"
+set "PORT=3000"
+set "DATA_DIR=%~dp0data"
+if not exist data\config.json node scripts\configure.mjs --local
 if not exist data\config.json (
  pause
  exit /b 1
 )
-echo 本机测试请在浏览器打开 http://localhost:3000 。请保持此窗口开启。
-node runtime\server.mjs
+echo 展馆：http://127.0.0.1:3000/
+echo 管理员后台：http://127.0.0.1:3000/admin
+echo 服务就绪后会自动打开浏览器。请保持此窗口开启。
+node runtime\server.mjs --open-browser %*
 pause

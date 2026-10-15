@@ -12,7 +12,7 @@ let rl=createInterface({input:process.stdin,output:process.stdout});
 async function hidden(label){if(!process.stdin.isTTY)return rl.question(label);rl.close();process.stdout.write(label);return new Promise(resolve=>{let value='';process.stdin.setRawMode(true);process.stdin.resume();const listener=chunk=>{for(const c of chunk.toString()){if(c==='\u0003'){process.stdin.setRawMode(false);process.exit(130)}if(c==='\r'||c==='\n'){process.stdin.removeListener('data',listener);process.stdin.setRawMode(false);process.stdin.pause();process.stdout.write('\n');rl=createInterface({input:process.stdin,output:process.stdout});resolve(value);return;}if(c==='\u007f'||c==='\b')value=value.slice(0,-1);else if(c>=' ')value+=c;}};process.stdin.on('data',listener);});}
 try{
 console.log('凤华 · 匠彩：独立部署配置。密码不会显示，也不会上传到外部服务。');
-const raw=(await rl.question(`正式网址（含 https://；本机测试可填 http://localhost:3000）${old.origin?' ['+old.origin+']':''}：`)).trim()||old.origin;
+const raw=(await rl.question(`正式网址（含 https://；本机测试可填 http://127.0.0.1:3000；Windows本地启动可直接回车）${old.origin?' ['+old.origin+']':''}：`)).trim()||old.origin||(process.argv.includes('--local')?'http://127.0.0.1:3000':undefined);
 let origin;try{const u=new URL(raw);const local=['localhost','127.0.0.1','[::1]'].includes(u.hostname);if(u.username||u.password||u.search||u.hash||u.pathname!=='/'||(!local&&u.protocol!=='https:')||!['http:','https:'].includes(u.protocol))throw 0;origin=u.origin;}catch{throw new Error('网址格式不正确。正式域名必须使用 https://，不包含子路径。');}
 const password=await hidden('设置新管理员密码（至少12个字符，建议使用密码管理器生成）：');
 if(password.length<12||password.length>128)throw new Error('密码长度应为12至128个字符。');if(password!==await hidden('再输入一次密码：'))throw new Error('两次密码不一致，配置未修改。');

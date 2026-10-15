@@ -1,5 +1,6 @@
 import '../scripts/restore-media.mjs';
 import http from 'node:http';
+import { spawn } from 'node:child_process';
 import { createReadStream } from 'node:fs';
 import { readFile, stat, readdir, rm, statfs } from 'node:fs/promises';
 import path from 'node:path';
@@ -12,7 +13,10 @@ import { POST as feedbackPost } from './feedback.mjs';
 import { contentApi,publicDocument,videoMeta } from './content.mjs';
 import { createQrArtifacts } from './qr.mjs';
 
-const origin=new URL(config.origin).origin;
+const localPreview=process.env.LOCAL_PREVIEW==='1';
+const port=Number(process.env.PORT||3000);
+const host=localPreview?'127.0.0.1':process.env.HOST||'127.0.0.1';
+const origin=localPreview?`http://127.0.0.1:${port}`:new URL(config.origin).origin;
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp4':'video/mp4','.ico':'image/x-icon','.json':'application/json; charset=utf-8'};
 const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/#'+selected));return qrCache.get(selected);}
 function security(res){res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');res.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'");}
@@ -58,6 +62,15 @@ await staticFile(req,res,path.join(ROOT,'dist',decoded));
 }
 export const server=http.createServer((req,res)=>handle(req,res).catch(error=>{if(!res.headersSent){security(res);res.writeHead(error.status||500,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify({error:error.status===413?'提交内容过大':'服务暂时不可用，请稍后重试'}));}else res.destroy();console.error('Request failed:',error.code||error.name);}));
 server.requestTimeout=120000;server.headersTimeout=30000;
-const port=Number(process.env.PORT||3000);server.listen(port,process.env.HOST||'127.0.0.1',()=>console.log(`凤华展馆服务已启动。端口 ${port}，公开地址 ${origin}`));
+server.on('error',error=>{console.error(error.code==='EADDRINUSE'?`端口 ${port} 已被占用，请关闭之前的启动窗口后重试。`:`服务启动失败：${error.message}`);process.exit(1);});
+server.listen(port,host,()=>{
+ console.log(`横小艺韵服务已启动。端口 ${port}，公开地址 ${origin}`);
+ console.log(`管理员后台：${origin}/admin`);
+ if(process.platform==='win32'&&process.argv.includes('--open-browser')){
+  const target=origin+(process.argv.includes('--admin')?'/admin':'/');
+  const browser=spawn('explorer.exe',[target],{stdio:'ignore'});
+  browser.on('error',()=>console.error(`请在浏览器打开 ${target}`));
+ }
+});
 const maintenance=setInterval(async()=>{cleanup();try{for(const entry of await readdir(path.join(DATA,'uploads'),{withFileTypes:true})){if(!entry.isDirectory())continue;const folder=path.join(DATA,'uploads',entry.name);const s=await stat(folder);if(Date.now()-s.mtimeMs>86400000)await rm(folder,{recursive:true,force:true});}}catch{}},3600000);maintenance.unref();
 function stop(){server.close(()=>{db.close();process.exit(0)});setTimeout(()=>process.exit(1),10000).unref();}process.on('SIGTERM',stop);process.on('SIGINT',stop);
