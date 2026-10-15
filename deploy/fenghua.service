@@ -1,0 +1,25 @@
+[Unit]
+Description=Fenghua Craft Gallery
+After=network.target
+
+[Service]
+Type=simple
+User=fenghua
+Group=fenghua
+WorkingDirectory=/opt/fenghua
+ExecStart=/usr/bin/node /opt/fenghua/runtime/server.mjs
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=3000
+Environment=TRUST_PROXY=1
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/fenghua/data
+
+[Install]
+WantedBy=multi-user.target

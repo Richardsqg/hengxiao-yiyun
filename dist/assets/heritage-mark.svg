@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">横小艺韵 · 如意同心花</title>
+  <desc id="desc">深蓝底色，金色如意花窗环抱一颗童心；提取校徽对称圆弧与方形中心的结构，寓意美育滋养与非遗传承。</desc>
+  <rect width="512" height="512" rx="112" fill="#102e40"/>
+  <path d="M256 104C223 70 171 87 171 135C123 119 89 152 106 196C61 220 62 273 106 296C89 340 123 374 171 358C171 406 223 423 256 389C289 423 341 406 341 358C389 374 423 340 406 296C450 273 451 220 406 196C423 152 389 119 341 135C341 87 289 70 256 104Z" fill="none" stroke="#e7bf72" stroke-width="16" stroke-linejoin="round"/>
+  <rect x="198" y="188" width="116" height="116" rx="20" transform="rotate(45 256 246)" fill="none" stroke="#e7bf72" stroke-width="12"/>
+  <path d="M256 283C248 277 216 256 216 236C216 212 244 206 256 226C268 206 296 212 296 236C296 256 264 277 256 283Z" fill="#f5dea5"/>
+</svg>

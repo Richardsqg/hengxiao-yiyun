@@ -1,0 +1,36 @@
+[
+  {
+    "path": "dist/assets/film-02.mp4",
+    "bytes": 22603195,
+    "sha256": "bc07894f842017d615176a20b8ce0cb2c44e91456a6dca2acc9e98903359b965",
+    "parts": [
+      "media-parts/film-02/001.part",
+      "media-parts/film-02/002.part",
+      "media-parts/film-02/003.part",
+      "media-parts/film-02/004.part",
+      "media-parts/film-02/005.part",
+      "media-parts/film-02/006.part",
+      "media-parts/film-02/007.part",
+      "media-parts/film-02/008.part",
+      "media-parts/film-02/009.part",
+      "media-parts/film-02/010.part",
+      "media-parts/film-02/011.part"
+    ]
+  },
+  {
+    "path": "dist/assets/film-03.mp4",
+    "bytes": 16917550,
+    "sha256": "99515a17ae887a99ae6bbb9bd1519db7ca1a1ca99467ca53d353f74e0dbf7e85",
+    "parts": [
+      "media-parts/film-03/001.part",
+      "media-parts/film-03/002.part",
+      "media-parts/film-03/003.part",
+      "media-parts/film-03/004.part",
+      "media-parts/film-03/005.part",
+      "media-parts/film-03/006.part",
+      "media-parts/film-03/007.part",
+      "media-parts/film-03/008.part",
+      "media-parts/film-03/009.part"
+    ]
+  }
+]

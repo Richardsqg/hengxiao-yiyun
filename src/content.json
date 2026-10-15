@@ -1,0 +1,294 @@
+{
+  "chapters": [
+    {
+      "id": "history",
+      "label": "历史",
+      "headline": "一炉金彩，随海风远行",
+      "intro": "清代康熙年间，广彩逐渐兴起，广州工匠在瓷器上绘彩、加金，再经烤烧定色。海外订单带来新的题材与审美，珠江口也成为技艺交流的窗口。2008年，广彩瓷烧制技艺列入国家级非物质文化遗产名录，这门手艺延续至今。",
+      "interaction": "点选三个时间节点，展开一段历史",
+      "cards": [
+        {
+          "title": "康熙年间 · 兴起",
+          "text": "釉上彩绘在广州发展，瓷器成为远洋贸易中的重要商品。",
+          "sourceIds": [
+            "ihc-guangcai"
+          ]
+        },
+        {
+          "title": "乾隆时期 · 成熟",
+          "text": "地方彩料、传统画法与西方绘画经验相遇，形成鲜明风格。",
+          "sourceIds": [
+            "gz-museum-guangcai"
+          ]
+        },
+        {
+          "title": "2008年 · 列入名录",
+          "text": "广彩瓷烧制技艺进入第二批国家级非遗名录。",
+          "sourceIds": [
+            "ihc-guangcai"
+          ]
+        }
+      ],
+      "sourceIds": [
+        "ihc-guangcai",
+        "gz-museum-guangcai"
+      ]
+    },
+    {
+      "id": "culture",
+      "label": "文化",
+      "headline": "器物很小，心意很长",
+      "intro": "传统纹饰常把祝愿藏在花木、禽鸟与谐音之中：一枚蝙蝠、一枝寿桃，都可能承载对生活的期盼。进入今天的课堂，学生从观察、构图和配色开始，将花鸟与山水变成自己的作品。读懂工艺，也是在认识一代代人的生活心愿。",
+      "interaction": "翻开寓意卡，发现纹饰里的祝福",
+      "cards": [
+        {
+          "title": "桃与蝠",
+          "text": "故宫藏桃蝠纹瓶以桃实、红蝠等构成福寿主题。",
+          "sourceIds": [
+            "dpm-peach-bat"
+          ]
+        },
+        {
+          "title": "凤冠之礼",
+          "text": "国博凤冠是明代皇后礼冠，花丝与珠翠体现礼仪和审美。",
+          "sourceIds": [
+            "nmc-crown"
+          ]
+        },
+        {
+          "title": "把传统带进课堂",
+          "text": "上传展板以“百鸟朝凤”“千里江山”展开工艺美术学习。",
+          "sourceIds": [
+            "uploaded-pdf-p2-p3"
+          ]
+        }
+      ],
+      "sourceIds": [
+        "dpm-peach-bat",
+        "nmc-crown",
+        "uploaded-pdf-p2-p3"
+      ]
+    },
+    {
+      "id": "forms",
+      "label": "造型",
+      "headline": "器形，是握在手中的风景",
+      "intro": "先看轮廓，再看细节。广彩可见于杯、盘、瓶等不同用途的瓷器；广州铜胎画珐琅也有茶叶罐、圆盘等器形。同样是盛放、陈设与赏玩的器物，材质和结构却不相同。转动视角，观察口沿、腹部与底足，能读出手艺的选择。",
+      "interaction": "点击器形卡，观察轮廓与用途",
+      "cards": [
+        {
+          "title": "茶碟 · 小巧实用",
+          "text": "广彩花卉纹章纹碟，以瓷为胎，把装饰融入饮茶日常。",
+          "sourceIds": [
+            "gdm-armorial"
+          ]
+        },
+        {
+          "title": "茶叶罐 · 收纳之美",
+          "text": "铜胎画珐琅海棠形茶叶罐，在器身曲线中安排人物画面。",
+          "sourceIds": [
+            "tianhe-arts"
+          ]
+        },
+        {
+          "title": "瓜棱盒 · 转折生趣",
+          "text": "画珐琅瓜棱式盒做成六瓣轮廓，以分层开光组织画面。",
+          "sourceIds": [
+            "dpm-lobed-box"
+          ]
+        }
+      ],
+      "sourceIds": [
+        "gdm-armorial",
+        "tianhe-arts",
+        "dpm-lobed-box"
+      ]
+    },
+    {
+      "id": "patterns",
+      "label": "纹样",
+      "headline": "花鸟入画，金线成诗",
+      "intro": "纹样不只是填满器面。锦地衬托主题，开光像一扇画窗，花鸟与人物在其中各有位置。观看广彩时，可以寻找金彩与彩绘的层次；观看画珐琅时，则留意笔触、明暗和景物之间的关系。尝试从一朵花开始，发现整幅构图的节奏。",
+      "interaction": "点选关键词，定位一处装饰细节",
+      "cards": [
+        {
+          "title": "开光 · 一扇画窗",
+          "text": "在装饰地纹中留出画面区域，容纳人物、花鸟或山水。",
+          "sourceIds": [
+            "gz-museum-guangcai"
+          ]
+        },
+        {
+          "title": "金彩 · 明暗之间",
+          "text": "广彩常以金彩衬托主题，与丰富色彩形成视觉层次。",
+          "sourceIds": [
+            "gz-museum-guangcai"
+          ]
+        },
+        {
+          "title": "山水与西洋人物",
+          "text": "故宫藏瓜棱式盒，将中式山水、西洋人物与四季花卉组合。",
+          "sourceIds": [
+            "dpm-lobed-box"
+          ]
+        }
+      ],
+      "sourceIds": [
+        "gz-museum-guangcai",
+        "dpm-lobed-box"
+      ]
+    },
+    {
+      "id": "craft",
+      "label": "工艺",
+      "headline": "同样流光，各有匠法",
+      "intro": "“彩”与“珐琅”相遇，不代表做法完全一样。广彩在瓷釉之上绘饰；铜胎画珐琅在金属胎的珐琅地上绘画；掐丝珐琅先用金属丝围出纹样，再填色烧制。理解胎体、绘饰与烧制的差别，才能看懂相似光泽背后的不同手艺。",
+      "interaction": "切换三条工艺路径，比较关键步骤",
+      "cards": [
+        {
+          "title": "广彩 · 绘在瓷上",
+          "text": "描线 → 填色与施金 → 烤烧。具体步骤随作品而调整。",
+          "sourceIds": [
+            "gz-guangcai-process"
+          ]
+        },
+        {
+          "title": "画珐琅 · 以釉为画",
+          "text": "铜胎施珐琅地 → 烧结 → 绘彩 → 再烧制。",
+          "sourceIds": [
+            "dpm-peach-bat"
+          ]
+        },
+        {
+          "title": "掐丝珐琅 · 以丝为界",
+          "text": "制胎 → 掐丝 → 点蓝与烧蓝 → 磨光、镀金。",
+          "sourceIds": [
+            "ihc-cloisonne"
+          ]
+        }
+      ],
+      "sourceIds": [
+        "gz-guangcai-process",
+        "dpm-peach-bat",
+        "ihc-cloisonne"
+      ],
+      "courseNote": "课程照片展示的是学生工艺实践。若作品采用免烧颜料、胶或其他教学材料，应标注“掐丝工艺体验作品”，不直接等同于烧制景泰蓝。"
+    },
+    {
+      "id": "exchange",
+      "label": "中西交流",
+      "headline": "海路相逢，审美相融",
+      "intro": "商船带来的不只有货物，还有图样、颜料和新的观看方式。广彩与广州画珐琅在交流中吸收外来经验，也把中国花鸟、山水和工艺带向海外。家族纹章出现在中国瓷碟上，西洋人物走进东方器物，一件作品便是一段相遇的记录。",
+      "interaction": "沿着“图样—制作—远行”查看一件器物的旅程",
+      "cards": [
+        {
+          "title": "图样来到广州",
+          "text": "定制纹章瓷反映海外订购者的身份与审美需求。",
+          "sourceIds": [
+            "gdm-armorial"
+          ]
+        },
+        {
+          "title": "技艺在本土生长",
+          "text": "广珐琅从外来技术中发展，兼有宫廷、民间与外销面貌。",
+          "sourceIds": [
+            "gdm-enamel-exhibition"
+          ]
+        },
+        {
+          "title": "画面连接世界",
+          "text": "广东藏铜胎画珐琅挂屏，以明暗和透视呈现中西相遇的风景。",
+          "sourceIds": [
+            "gdm-enamel-screen"
+          ]
+        }
+      ],
+      "sourceIds": [
+        "gdm-armorial",
+        "gdm-enamel-exhibition",
+        "gdm-enamel-screen"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "ihc-guangcai",
+      "title": "广彩瓷烧制技艺",
+      "organization": "中国非物质文化遗产网",
+      "url": "https://www.ihchina.cn/project_details/14453/"
+    },
+    {
+      "id": "gz-museum-guangcai",
+      "title": "万缕金丝织白玉——清代广彩精品鉴赏",
+      "organization": "广州博物馆",
+      "url": "https://www.guangzhoumuseum.cn/website_cn/Web/Resource/findingsDetail.aspx?id=92"
+    },
+    {
+      "id": "gz-guangcai-process",
+      "title": "广彩瓷烧制技艺",
+      "organization": "广州市委网信办（内容来源广东省文化馆）",
+      "url": "https://gzwxb.gov.cn/context/contextId/200564"
+    },
+    {
+      "id": "tianhe-arts",
+      "title": "藏品鉴赏——清代广作工艺藏品鉴赏（三）",
+      "organization": "广州市天河区文化广电旅游体育局",
+      "url": "https://www.thnet.gov.cn/thqzdlyxxgkzl/wh/bwggwgk/zpjs/content/post_8095164.html"
+    },
+    {
+      "id": "dpm-peach-bat",
+      "title": "康熙款画珐琅桃蝠纹瓶",
+      "organization": "故宫博物院",
+      "url": "https://www.dpm.org.cn/collection/enamel/234653.html"
+    },
+    {
+      "id": "dpm-lobed-box",
+      "title": "乾隆款画珐琅开光山水人物图瓜棱式盒",
+      "organization": "故宫博物院",
+      "url": "https://intl.dpm.org.cn/Enamels/18518.html"
+    },
+    {
+      "id": "ihc-cloisonne",
+      "title": "景泰蓝制作技艺",
+      "organization": "中国非物质文化遗产网",
+      "url": "https://www.ihchina.cn/project_details/14342/"
+    },
+    {
+      "id": "gdm-armorial",
+      "title": "清乾隆广彩花卉纹章纹碟",
+      "organization": "广东省博物馆",
+      "url": "https://www.gdmuseum.org.cn/cn/col49/9514"
+    },
+    {
+      "id": "gdm-enamel-exhibition",
+      "title": "臻于至美——广珐琅特展",
+      "organization": "广东省博物馆",
+      "url": "https://www.gdmuseum.org.cn/cn/col61/1315"
+    },
+    {
+      "id": "gdm-enamel-screen",
+      "title": "铜胎画珐琅人物挂屏",
+      "organization": "广东省博物馆",
+      "url": "https://www.gdmuseum.org.cn/cn/col49/149866",
+      "note": "该来源标题标清中期，年代字段标清晚期，存在内部不一致；网站文字不采用其具体断代。"
+    },
+    {
+      "id": "nmc-crown",
+      "title": "孝端皇后凤冠",
+      "organization": "中国国家博物馆",
+      "url": "https://www.chnmuseum.cn/zp/zpml/kgfjp/202111/t20211126_252409.shtml"
+    },
+    {
+      "id": "nmc-crown-2026",
+      "title": "来国博看中国｜馆藏精品：孝端皇后九龙九凤冠",
+      "organization": "中国国家博物馆",
+      "url": "https://www.chnmuseum.cn/zx/gbxw/202603/t20260306_278223.shtml"
+    },
+    {
+      "id": "uploaded-pdf-p2-p3",
+      "title": "课程展板设计(1).pdf，第2—3页",
+      "organization": "用户提供的课程资料",
+      "url": null
+    }
+  ]
+}

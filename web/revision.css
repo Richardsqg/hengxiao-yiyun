@@ -1,0 +1,70 @@
+/* 1.3: complete image cards move in a native horizontal rail. */
+.culture-feature{display:block;min-width:0}
+.culture-intro{max-width:960px;padding-top:26px}
+.culture-intro>p{max-width:880px}
+.gallery-rail-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 15px;color:#c8d7dc;font-size:12px;letter-spacing:1px}
+.gallery-rail-heading>span:last-child{display:flex;align-items:center;gap:7px;color:#91acb8;font-size:10px;letter-spacing:0}
+.image-rail{--rail-gap:20px;display:flex;gap:var(--rail-gap);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;position:relative;padding:0 0 5px;touch-action:pan-x pan-y pinch-zoom}
+.image-rail::-webkit-scrollbar{display:none}
+.rail-card{flex:0 0 calc((100% - var(--rail-gap)*2)/3);min-width:0;margin:0;scroll-snap-align:start;scroll-snap-stop:normal}
+.rail-picture{display:block;position:relative;width:100%;aspect-ratio:1.12;background:transparent;border:0;border-radius:0;overflow:hidden;padding:0}
+.rail-picture img{width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none}
+.gallery-museum .rail-picture{aspect-ratio:16/10}
+.gallery-museum .rail-picture img{object-fit:cover;object-position:center}
+.gallery-classroom .rail-picture{aspect-ratio:1.35}
+.gallery-classroom .rail-picture img{object-fit:cover}
+.rail-expand{position:absolute;right:9px;bottom:9px;display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;color:#f5e2b6;background:#102632b5;pointer-events:none}
+.rail-card figcaption{display:flex;align-items:flex-start;gap:9px;padding-top:13px;color:#bccfd7;min-height:43px}
+.rail-number{font:10px/1.7 monospace;color:#d8b975;flex-shrink:0}
+.rail-card figcaption strong{font-size:12px;font-weight:400;line-height:1.65;overflow-wrap:anywhere}
+.rail-navigation{display:flex;align-items:center;justify-content:space-between;color:#88a5b3;font-size:10px;margin-top:11px}
+.picture-arrows button{width:40px;height:40px}
+.picture-arrows button:disabled{opacity:.28;cursor:default}
+.classroom-gallery{margin-top:48px}
+.classroom-heading{margin:30px 0 20px}
+.classroom-heading h2{font:500 clamp(22px,2.6vw,31px)/1.5 var(--serif);overflow-wrap:anywhere}
+.classroom-feature{display:block;max-width:960px}
+.course-levels{max-width:880px}
+.film-summary{display:block;padding:30px 0;border-bottom:0;max-width:900px}
+.film-summary h2{white-space:normal;font:500 clamp(22px,2.6vw,29px)/1.6 var(--serif);margin:13px 0 18px}
+.film-summary .film-course-intro{max-width:none;font-size:14px;line-height:2.15;color:#c4d2d6;white-space:pre-line}
+.film-summary .film-material-note{max-width:none;font-size:11px;line-height:1.8;color:#92adb9;margin-top:20px;padding-top:14px;border-top:1px solid #ffffff18}
+.zoom-stage{overscroll-behavior:contain;isolation:isolate;-webkit-user-select:none;user-select:none;touch-action:none}
+.zoom-stage img{pointer-events:none;transform-origin:center;transition:none!important;-webkit-user-drag:none}
+.gallery-modal .zoom-stage{margin:0;min-height:0}
+.gallery-modal .compact-tools{flex-wrap:wrap}
+.gallery-modal .lightbox-caption>.picture-arrows{margin-top:16px}
+.gallery-modal{overscroll-behavior:contain}
+.image-rail:focus-visible,.zoom-stage:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media(max-width:760px){
+ .image-rail{--rail-gap:10px}
+ .gallery-rail-heading{margin-bottom:12px;font-size:11px}
+ .gallery-rail-heading>span:last-child{font-size:9px;gap:4px}
+ .gallery-museum .rail-picture{aspect-ratio:16/10}
+ .gallery-museum .rail-expand{width:23px;height:23px;bottom:5px;right:4px}
+ .rail-card figcaption{gap:5px;padding-top:9px;min-height:48px}
+ .rail-card figcaption strong{font-size:10px}
+ .rail-number{font-size:9px}
+ .gallery-classroom .rail-card{flex-basis:72%}
+ .gallery-classroom .rail-card figcaption strong{font-size:12px}
+ .gallery-classroom .rail-picture{aspect-ratio:1.32}
+ .rail-navigation{margin-top:4px}
+ .picture-arrows button{width:38px;height:38px}
+ .culture-intro{padding-top:23px}
+ .classroom-gallery{margin-top:32px}
+ .classroom-heading{margin:23px 0 16px}
+ .classroom-heading h2{font-size:23px;margin:10px 0}
+ .film-summary{padding:25px 0}
+ .film-summary .film-course-intro{font-size:13px}
+ .film-summary .film-material-note{font-size:10px}
+ .gallery-modal .zoom-stage{height:50vh;height:50dvh}
+ .gallery-modal .zoom-hint{font-size:9px;line-height:1.7}
+}
+@media(prefers-reduced-motion:reduce){.image-rail{scroll-behavior:auto}}
+
+/* 1.4: direct crown title, without the brand bar or its divider. */
+.exhibition-header.crown-page-header{border-bottom:0;min-height:0;padding-top:32px;padding-bottom:8px}
+.crown-page-title{font:500 30px/1.4 var(--serif);letter-spacing:3px;color:var(--gold);margin:0;white-space:nowrap}
+.section-crown .crown-room-top{justify-content:flex-end}
+.artifact-label h2{font:500 22px var(--serif);margin:0;color:var(--gold);letter-spacing:3px}
+@media(max-width:760px){.exhibition-header.crown-page-header{display:flex;padding:24px 18px 3px}.crown-page-title{font-size:26px;letter-spacing:2px}.artifact-label h2{font-size:19px;letter-spacing:1px}.section-crown .crown-room{padding-top:0}}
