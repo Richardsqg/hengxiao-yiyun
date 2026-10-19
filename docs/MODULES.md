@@ -57,7 +57,7 @@
 - **内容归属：** `src/exhibition.json` 的 `videos` 保存内置展陈信息，`runtime/storage.mjs` 的 `defaultVideos` 保存服务默认影片信息。调整默认影片时应同时核对两处；数据库中管理员已保存的影片设置优先保留。
 - **媒体归属：** `dist/assets/film-01.mp4` 至 `film-03.mp4` 及同名 JPG 封面；第二、三部的 Git 源文件为 `media-parts/` 下的分片，由 `scripts/restore-media.mjs` 根据 `media-parts/manifest.json` 还原并校验。
 - **管理：** `/admin` →“影片与360°”；上传视频与保存视频资料会立即生效，不属于图文草稿历史。
-- **当前状态：** 第一部仍是原有 36 秒静音照片导览；本次上传的《掐丝珐琅.mp4》尚未接入，原因和下一步见 [素材清单](MEDIA_INVENTORY.md)。
+- **当前状态：** 第一片已为用户重传的113秒掐丝珐琅视频，旧36秒静音导览保留归档；新路径与来源见 [素材清单](MEDIA_INVENTORY.md)。
 
 ## 4. 观展留言与问卷
 
