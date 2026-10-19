@@ -8,3 +8,14 @@ deploy/Caddyfile
 /dist/assets/film-02.mp4
 /dist/assets/film-03.mp4
 /dist/assets/*.restore-*
+
+# 本机检查、预览与上传中间文件
+/work/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
+*.p12
+*.pfx

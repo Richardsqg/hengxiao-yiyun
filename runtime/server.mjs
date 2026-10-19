@@ -18,7 +18,7 @@ const port=Number(process.env.PORT||3000);
 const host=localPreview?'127.0.0.1':process.env.HOST||'127.0.0.1';
 const origin=localPreview?`http://127.0.0.1:${port}`:new URL(config.origin).origin;
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp4':'video/mp4','.ico':'image/x-icon','.json':'application/json; charset=utf-8'};
-const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/#'+selected));return qrCache.get(selected);}
+const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/'+selected));return qrCache.get(selected);}
 function security(res){res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');res.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'");}
 async function send(res,response,head=false){res.writeHead(response.status,Object.fromEntries(response.headers));if(head){res.end();return;}if(response.body)await pipeline(Readable.fromWeb(response.body),res);else res.end();}
 async function staticFile(req,res,file){let s;try{s=await stat(file)}catch{await send(res,json({error:'文件不存在'},404));return;}if(!s.isFile()){await send(res,json({error:'文件不存在'},404));return;}
@@ -56,7 +56,7 @@ if(p==='/api/backup'&&method==='GET'){if(!isAdmin(request)){await send(res,json(
 if(p.startsWith('/api/media/')&&['GET','HEAD'].includes(method)){const key=p.slice(11);if(!/^(frames\/[a-f0-9-]+\.(jpg|png|webp)|videos\/[a-f0-9-]+\.mp4)$/.test(key)){await send(res,json({error:'文件不存在'},404));return;}await staticFile(req,res,path.join(DATA,'media',key));return;}
 if(p.startsWith('/api/')){await send(res,json({error:'接口不存在'},404));return;}
 if(method==='POST'){await send(res,json({error:'方法不支持'},405));return;}
-if(['/','/admin','/admin/','/guide','/guide/','/preview','/poster'].includes(p)){await staticFile(req,res,path.join(ROOT,'dist','index.html'));return;}
+if(['/','/crown','/crown/','/culture','/culture/','/films','/films/','/voices','/voices/','/admin','/admin/','/guide','/guide/','/preview','/preview/','/poster','/poster/'].includes(p)){await staticFile(req,res,path.join(ROOT,'dist','index.html'));return;}
 let decoded;try{decoded=decodeURIComponent(p)}catch{await send(res,json({error:'请求无效'},400));return;}if(decoded.includes('..')||decoded.includes('\\')||decoded.split('/').some(s=>s.startsWith('.'))){await send(res,json({error:'文件不存在'},404));return;}
 await staticFile(req,res,path.join(ROOT,'dist',decoded));
 }

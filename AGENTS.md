@@ -18,7 +18,7 @@
 
 ## 常用命令
 运行要求以 package.json 为准：Node.js >=24.15.0 且 <25。
-- npm test：35项临时数据库/本机HTTP集成测试，不需要先配置正式 data/。
+- npm test：临时数据库/本机HTTP与导航回归测试，项数以当次运行结果为准，不需要先配置正式 data/。
 - npm install：仅开发/重新构建需要安装开发依赖。
 - npm run build：生成前端并转译指定 TypeScript 服务模块。
 - npm run configure：交互式设置站点网址和管理员密码；不要把密码写入源码。
@@ -31,10 +31,18 @@
 - src/：需转译的 TypeScript 后端模块和兼容资料。
 - runtime/server.mjs、storage.mjs、content.mjs：Node服务、存储和内容发布。
 - scripts/build.mjs 指定的 runtime 模块是生成文件，优先改相应 src/*.ts，再构建。
-- media-parts/：两部较大视频分片及校验清单；scripts/restore-media.mjs 会在启动/配置/构建时自动还原默认MP4。不要删除分片，不要把还原后的两部MP4重复提交。\n- dist/：可直接提供服务的页面与媒体。不要只改压缩后的JS。不要删 dist/assets/ 的媒体原件，构建脚本会保留它们。
+- media-parts/：两部较大视频分片及校验清单；scripts/restore-media.mjs 会在启动/配置/构建时自动还原默认MP4。不要删除分片，不要把还原后的两部MP4重复提交。
+- dist/：可直接提供服务的页面与媒体。不要只改压缩后的JS。不要删 dist/assets/ 的媒体原件，构建脚本会保留它们。
 - deploy/：Caddy和systemd配置示例。
 - tests/：已有接口集成测试。
 
 ## 交付与验证
 针对变更做必要检查，不为简单文案/样式反复增加测试。只有业务代码改动或基线迁移风险时运行相关测试。
 报告说明：改了什么、如何打开、验证了什么、还缺什么。未配置服务器时只交付本地结果，不把预览说成国内正式上线。
+
+## 2026-10-18 接续说明
+- 先读 docs/HANDOFF.md、docs/MODULES.md、docs/MEDIA_INVENTORY.md，了解当前工作与真实缺口；不要依赖聊天是否归档。
+- 一个仓库、一个应用，按文档划分模块归属，不复制应用或引入微服务。
+- 根路径 / 及旧根路径 hash 仍默认凤冠；/crown、/culture、/films、/voices 为可直接加载和刷新的模块入口。公众导航仍为四入口，后台不加入公众导航。
+- Windows_本机测试.bat 使用独立 data/local-preview/；原 Windows_启动.bat 默认 data/，支持显式 DATA_DIR。配置密码和已有数据必须留在 Git 之外。
+- 本次用户上传掐丝珐琅.mp4 超过当前附件传输上限，尚未导入；不得称已替换，也不要擅自清除36秒静音导览。
