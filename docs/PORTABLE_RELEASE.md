@@ -2,6 +2,8 @@
 
 ## 下载与运行
 
+仓库为私有仓库，下载前请在浏览器登录拥有该仓库权限的 GitHub 账号（Richardsqg）。未登录时下载地址会显示404。观众在学校同WiFi扫码参观不需要GitHub账号或ChatGPT账号。
+
 完整软件及可维护源码：<https://github.com/Richardsqg/hengxiao-yiyun/archive/refs/tags/v1.4.1-portable.zip>。
 
 解压后双击 `Windows_一键运行.bat`；已内置官方Windows x64 Node.js24.22.0，运行不需安装Node、npm或联网下载素材。适用于Windows10/11 x64；ARM、macOS、Linux没有包含对应便携运行程序，可按源码运行要求另配置。
