@@ -6,3 +6,8 @@
 *.part binary
 
 *.bat text eol=crlf
+
+*.exe binary
+
+# Preserve the official vendored license byte-for-byte.
+runtime/NODE-LICENSE.txt -text -whitespace

@@ -37,3 +37,19 @@
 - 当前云环境网络策略阻止直接HTTP访问原站域名，因此没有把这次本地检查说成外网直连测试。苹果/安卓/微信及中国内地实际网络访问仍需真机确认；Sites托管成功不等于已部署到国内服务器。
 
 GitHub对应修改继续提交到 `organize/modules-and-handoff-20261018`，随 PR #1 审阅；用户合并后才进入main。聊天归档后从README、HANDOFF和本文件继续。
+
+
+## 2026-10-19 最新软件与视频（优先于前述历史记录）
+第一片现更新为用户本次29,657,745字节的H.264/AAC、60fps双声道版本，113.150998秒，路径 film-01-qiasi-20261019-v2.mp4。软件保留上传原文件，Sites网页用23,507,490字节托管副本，原帧率、分辨率和音轨保持；此前36秒及上一113秒版本不删除。
+
+独立版升级为1.4.1 Windows x64便携软件，已内置官方Node24.22，双击Windows_一键运行.bat，选本机或同WiFi。独立data/portable和私有扫码面板；本轮47项测试通过。下载和真实验证范围见 [便携软件发布记录](PORTABLE_RELEASE.md)，使用菜单见 [操作指南](SOFTWARE_GUIDE.md)，公网方案见 [访问方案](ACCESS_OPTIONS.md)。未购买服务器或域名、未迁移生产数据，Windows/手机现场真机仍待验证。
+
+
+## 最新网页发布结果
+
+2026-10-19 20:10（北京时间），Sites第6版发布成功。
+- 版本ID：`appgprj_6ac9a6d9964481919211b933fdc366be~appgver_133b5f8aebf48191aa5dc6073a293d82`。
+- 托管源提交：`faed6b16f6e6a2d6106c5fd3fecc2234d1971a90`。
+- 部署ID：`appgdep_6ad60885f0e88191bc36b3264a95b14a`，最终状态`succeeded`。
+- 首页仍为 https://fenghua-craft-gallery.aurorafly32.chatgpt.site ，第一片在 `/films`。
+- 使用最新60fps双声道视频。国内网络、微信真机直连尚未验证；扫码免外网现场方案见便携软件说明。

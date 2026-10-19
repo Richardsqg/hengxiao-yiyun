@@ -105,3 +105,9 @@ Sites第5版已发布成功，原项目及公开访问范围不变。
 - 第一片所在影像展厅：https://fenghua-craft-gallery.aurorafly32.chatgpt.site/films
 - 文化寻根 /culture，凤冠 /crown，留言 /voices；后台 /admin 使用原托管站的ChatGPT账号认证。
 - 本次发布及素材来源见 [WEB_RELEASE.md](WEB_RELEASE.md)。当前独立GitHub修改继续保存在PR #1工作分支，尚未自动合并main。
+
+
+## 2026-10-19 最新软件与视频（优先于前述历史记录）
+第一片现更新为用户本次29,657,745字节的H.264/AAC、60fps双声道版本，113.150998秒，路径 film-01-qiasi-20261019-v2.mp4。软件保留上传原文件，Sites网页用23,507,490字节托管副本，原帧率、分辨率和音轨保持；此前36秒及上一113秒版本不删除。
+
+独立版升级为1.4.1 Windows x64便携软件，已内置官方Node24.22，双击Windows_一键运行.bat，选本机或同WiFi。独立data/portable和私有扫码面板；本轮47项测试通过。下载和真实验证范围见 [便携软件发布记录](PORTABLE_RELEASE.md)，使用菜单见 [操作指南](SOFTWARE_GUIDE.md)，公网方案见 [访问方案](ACCESS_OPTIONS.md)。未购买服务器或域名、未迁移生产数据，Windows/手机现场真机仍待验证。
