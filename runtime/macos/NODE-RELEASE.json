@@ -1,0 +1,15 @@
+{
+  "version": "v24.22.0",
+  "platform": "darwin",
+  "architecture": "x64",
+  "minimum_macos": "13.5",
+  "source": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-darwin-x64.tar.gz",
+  "archive_bytes": 54356645,
+  "archive_sha256": "495e3f273c645f3c4677d438304cdfc701729ea5dec5728f5c8e76a2dece4b91",
+  "node_bytes": 125672816,
+  "node_sha256": "83dc50ed654b9494c722c4b9a836ce423242a9bd3214b99935e5a5c483ca025b",
+  "mach_o_minimum_macos": "13.5.0",
+  "official_checksums": "https://nodejs.org/dist/v24.22.0/SHASUMS256.txt",
+  "official_requirements": "https://github.com/nodejs/node/blob/v24.22.0/BUILDING.md#supported-platforms",
+  "license": "LICENSE.txt"
+}

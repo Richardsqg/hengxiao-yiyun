@@ -12,13 +12,16 @@ import { GET as adminGet, POST as adminPost } from './admin.mjs';
 import { POST as feedbackPost } from './feedback.mjs';
 import { contentApi,publicDocument,videoMeta } from './content.mjs';
 import { createQrArtifacts } from './qr.mjs';
+import { validateLanOrigin } from './preview-network.mjs';
 
 const localPreview=process.env.LOCAL_PREVIEW==='1';
+const lanPreview=process.env.LAN_PREVIEW==='1';
+if(localPreview&&lanPreview)throw new Error('本机与局域网预览模式不能同时启用。');
 const port=Number(process.env.PORT||3000);
-const host=localPreview?'127.0.0.1':process.env.HOST||'127.0.0.1';
-const origin=localPreview?`http://127.0.0.1:${port}`:new URL(config.origin).origin;
+const host=localPreview?'127.0.0.1':lanPreview?'0.0.0.0':process.env.HOST||'127.0.0.1';
+const origin=localPreview?`http://127.0.0.1:${port}`:lanPreview?validateLanOrigin(process.env.PREVIEW_ORIGIN,port):new URL(config.origin).origin;
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp4':'video/mp4','.ico':'image/x-icon','.json':'application/json; charset=utf-8'};
-const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/#'+selected));return qrCache.get(selected);}
+const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/'+selected));return qrCache.get(selected);}
 function security(res){res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');res.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'");}
 async function send(res,response,head=false){res.writeHead(response.status,Object.fromEntries(response.headers));if(head){res.end();return;}if(response.body)await pipeline(Readable.fromWeb(response.body),res);else res.end();}
 async function staticFile(req,res,file){let s;try{s=await stat(file)}catch{await send(res,json({error:'文件不存在'},404));return;}if(!s.isFile()){await send(res,json({error:'文件不存在'},404));return;}
@@ -28,6 +31,7 @@ headers['Content-Length']=String(Math.max(0,end-start+1));res.writeHead(code,hea
 function cookie(token='',expire=false){return `fenghua_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${expire?0:28800}${origin.startsWith('https:')?'; Secure':''}`;}
 async function requestBody(req,max){const chunks=[];let length=0;for await(const c of req){length+=c.length;if(length>max){const error=new Error('提交文件或内容过大');error.status=413;throw error;}chunks.push(c);}return Buffer.concat(chunks);}
 async function handle(req,res){security(res);let url;try{url=new URL(req.url,origin)}catch{await send(res,json({error:'请求无效'},400));return;}const method=req.method||'GET',p=url.pathname;
+if(lanPreview&&req.headers.host!==new URL(origin).host){await send(res,json({error:'请使用启动窗口显示的局域网网址访问'},403));return;}
 if(!['GET','HEAD','POST'].includes(method)){await send(res,json({error:'方法不支持'},405));return;}
 if(method==='POST'&&req.headers.origin!==origin){await send(res,json({error:'请从本展馆页面提交'},403));return;}
 const remote=req.socket.remoteAddress||'unknown';const local=['127.0.0.1','::1','::ffff:127.0.0.1'].includes(remote);const ip=process.env.TRUST_PROXY==='1'&&local?String(req.headers['x-forwarded-for']||remote).split(',').at(-1).trim():remote;
@@ -56,7 +60,7 @@ if(p==='/api/backup'&&method==='GET'){if(!isAdmin(request)){await send(res,json(
 if(p.startsWith('/api/media/')&&['GET','HEAD'].includes(method)){const key=p.slice(11);if(!/^(frames\/[a-f0-9-]+\.(jpg|png|webp)|videos\/[a-f0-9-]+\.mp4)$/.test(key)){await send(res,json({error:'文件不存在'},404));return;}await staticFile(req,res,path.join(DATA,'media',key));return;}
 if(p.startsWith('/api/')){await send(res,json({error:'接口不存在'},404));return;}
 if(method==='POST'){await send(res,json({error:'方法不支持'},405));return;}
-if(['/','/admin','/admin/','/guide','/guide/','/preview','/poster'].includes(p)){await staticFile(req,res,path.join(ROOT,'dist','index.html'));return;}
+if(['/','/crown','/crown/','/culture','/culture/','/films','/films/','/voices','/voices/','/admin','/admin/','/guide','/guide/','/preview','/preview/','/poster','/poster/'].includes(p)){await staticFile(req,res,path.join(ROOT,'dist','index.html'));return;}
 let decoded;try{decoded=decodeURIComponent(p)}catch{await send(res,json({error:'请求无效'},400));return;}if(decoded.includes('..')||decoded.includes('\\')||decoded.split('/').some(s=>s.startsWith('.'))){await send(res,json({error:'文件不存在'},404));return;}
 await staticFile(req,res,path.join(ROOT,'dist',decoded));
 }
@@ -66,10 +70,11 @@ server.on('error',error=>{console.error(error.code==='EADDRINUSE'?`端口 ${port
 server.listen(port,host,()=>{
  console.log(`横小艺韵服务已启动。端口 ${port}，公开地址 ${origin}`);
  console.log(`管理员后台：${origin}/admin`);
- if(process.platform==='win32'&&process.argv.includes('--open-browser')){
-  const target=origin+(process.argv.includes('--admin')?'/admin':'/');
-  const browser=spawn('explorer.exe',[target],{stdio:'ignore'});
+ if(['win32','darwin'].includes(process.platform)&&process.argv.includes('--open-browser')){
+  const target=process.argv.includes('--open-panel')&&(localPreview||lanPreview)?path.join(DATA,'打开与扫码.html'):origin+(process.argv.includes('--admin')?'/admin':'/');
+  const browser=spawn(process.platform==='darwin'?'open':'explorer.exe',[target],{stdio:'ignore'});
   browser.on('error',()=>console.error(`请在浏览器打开 ${target}`));
+  if(process.platform==='darwin')browser.once('exit',code=>{if(code!==0)console.error(`浏览器未自动打开，请手动打开 ${target}`);});
  }
 });
 const maintenance=setInterval(async()=>{cleanup();try{for(const entry of await readdir(path.join(DATA,'uploads'),{withFileTypes:true})){if(!entry.isDirectory())continue;const folder=path.join(DATA,'uploads',entry.name);const s=await stat(folder);if(Date.now()-s.mtimeMs>86400000)await rm(folder,{recursive:true,force:true});}}catch{}},3600000);maintenance.unref();

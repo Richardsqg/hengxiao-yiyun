@@ -1,4 +1,5 @@
 @echo off
+setlocal
 chcp 65001 >nul
 cd /d "%~dp0"
 where node >nul 2>nul
@@ -16,9 +17,9 @@ if errorlevel 1 (
 set "LOCAL_PREVIEW=1"
 set "HOST=127.0.0.1"
 set "PORT=3000"
-set "DATA_DIR=%~dp0data"
-if not exist data\config.json node scripts\configure.mjs --local
-if not exist data\config.json (
+if not defined DATA_DIR set "DATA_DIR=%~dp0data"
+if not exist "%DATA_DIR%\config.json" node scripts\configure.mjs --local
+if not exist "%DATA_DIR%\config.json" (
  pause
  exit /b 1
 )

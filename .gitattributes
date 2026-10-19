@@ -6,3 +6,12 @@
 *.part binary
 
 *.bat text eol=crlf
+
+*.exe binary
+*.tar.gz binary
+*.command text eol=lf
+*.sh text eol=lf
+
+# Preserve the official vendored license byte-for-byte.
+runtime/NODE-LICENSE.txt -text -whitespace
+runtime/macos/LICENSE.txt -text -whitespace

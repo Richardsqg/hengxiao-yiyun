@@ -649,10 +649,11 @@
   "videos": [
     {
       "slot": 1,
-      "title": "广彩珐琅",
-      "description": "课程图文导览 · 根据学校提供的展陈照片制作，36秒，无旁白。后续可替换为课程实拍宣传片。",
-      "url": "/assets/film-01.mp4",
-      "poster": "/assets/film-01.jpg"
+      "title": "掐丝珐琅",
+      "description": "掐丝珐琅课程视频 · 用户最新上传版本，约1分53秒，60帧，保留双声道音轨。",
+      "url": "/assets/film-01-qiasi-20261019-v2.mp4",
+      "poster": "/assets/film-01-qiasi-20261019-v2.jpg",
+      "mediaRevision": "qiasi-20261019-v2"
     },
     {
       "slot": 2,
