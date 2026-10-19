@@ -1,6 +1,17 @@
-# 横小艺韵 1.4.1 Windows便携软件
+# 横小艺韵 1.4.2 桌面软件
 
-## 下载与运行
+## 最新版：Intel Mac 与 Windows
+
+完整桌面包：<https://github.com/Richardsqg/hengxiao-yiyun/archive/refs/tags/v1.4.2-desktop.zip>。私有仓库，先登录拥有权限的GitHub账号再下载。
+
+- Intel Mac，macOS 13.5及更新：`macOS_一键运行.command`，备份为 `macOS_备份数据.command`；[完整Mac指南](MACOS_GUIDE.md)。
+- Windows10/11 x64：`Windows_一键运行.bat`，备份为 `Windows_备份数据.bat`。
+- 两套官方Node24.22运行程序分别随包提供；正常使用不需要额外插件或开发依赖。Mac运行包压缩保存，首次校验解压，未将超过100MiB的解压二进制提交Git。
+- 同一应用、相同功能和数据格式；各自安装目录的data/portable不会自动同步，不覆盖旧版数据。网页版/Sites保持原来的独立服务。
+
+以下1.4.1Windows发布信息保留为历史；1.4.2验证记录见文末。
+
+## 1.4.1 下载与运行记录
 
 仓库为私有仓库，下载前请在浏览器登录拥有该仓库权限的 GitHub 账号（Richardsqg）。未登录时下载地址会显示404。观众在学校同WiFi扫码参观不需要GitHub账号或ChatGPT账号。
 
@@ -43,3 +54,14 @@
 当前扫码模式不访问境外站点，所以现场观看不依赖翻墙；能否连通仍取决于同一网络、电脑开机、防火墙及校园隔离设置。公网免翻墙需要实际服务器、域名和国内网络验证，本轮未购买、创建或部署国内收费服务。
 
 网页版第6版已发布成功，原站入口不变；最新记录见 [WEB_RELEASE.md](WEB_RELEASE.md)。
+
+## 1.4.2 实际检查记录（2026-10-19）
+
+- `npm run build` 成功，构建产物与此前内容一致，未替换媒体或现有界面。
+- `npm test` 实际47项通过、0失败；没有把额外脚本模拟检查合算为API测试。
+- Mac两个.command及共享helper通过 `bash -n`，两个修改的MJS通过 `node --check`；`git diff --check`通过。
+- 8组Linux隔离stub检查通过：Intel首次解压和缓存复用、中文/空格/&路径、本机/LAN参数、启动与备份退出码、固定data/portable、缺架构包fallback、旧系统/旧Node拒绝、包和缓存损坏拒绝。
+- 官方Intel压缩包54,356,645字节，SHA-256为 `495e3f273c645f3c4677d438304cdfc701729ea5dec5728f5c8e76a2dece4b91`，与官方清单一致；内部Node为x86_64 Mach-O，最低系统标记13.5.0。
+- 当前执行环境为Linux；Intel Mac双击、Gatekeeper、浏览器唤起、网络权限、Safari及微信/手机真机仍未验证。不要将stub测试描述为Mac真机通过。
+
+新版在原工作分支提交并同步到PR #1；使用新的固定标签 `v1.4.2-desktop`，保留旧标签，不自动合并main，也不再次发布Sites或改变站点内容。

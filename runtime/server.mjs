@@ -70,10 +70,11 @@ server.on('error',error=>{console.error(error.code==='EADDRINUSE'?`端口 ${port
 server.listen(port,host,()=>{
  console.log(`横小艺韵服务已启动。端口 ${port}，公开地址 ${origin}`);
  console.log(`管理员后台：${origin}/admin`);
- if(process.platform==='win32'&&process.argv.includes('--open-browser')){
+ if(['win32','darwin'].includes(process.platform)&&process.argv.includes('--open-browser')){
   const target=process.argv.includes('--open-panel')&&(localPreview||lanPreview)?path.join(DATA,'打开与扫码.html'):origin+(process.argv.includes('--admin')?'/admin':'/');
-  const browser=spawn('explorer.exe',[target],{stdio:'ignore'});
+  const browser=spawn(process.platform==='darwin'?'open':'explorer.exe',[target],{stdio:'ignore'});
   browser.on('error',()=>console.error(`请在浏览器打开 ${target}`));
+  if(process.platform==='darwin')browser.once('exit',code=>{if(code!==0)console.error(`浏览器未自动打开，请手动打开 ${target}`);});
  }
 });
 const maintenance=setInterval(async()=>{cleanup();try{for(const entry of await readdir(path.join(DATA,'uploads'),{withFileTypes:true})){if(!entry.isDirectory())continue;const folder=path.join(DATA,'uploads',entry.name);const s=await stat(folder);if(Date.now()-s.mtimeMs>86400000)await rm(folder,{recursive:true,force:true});}}catch{}},3600000);maintenance.unref();

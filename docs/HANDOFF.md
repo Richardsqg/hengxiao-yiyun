@@ -1,6 +1,14 @@
 # 横小艺韵：继续工作与本机查看
 
-更新：2026-10-19（延续2026-10-18整理）。软件基线：1.4.0。仓库：<https://github.com/Richardsqg/hengxiao-yiyun>。
+更新：2026-10-19（延续2026-10-18整理）。当前桌面版：1.4.2，项目基线：1.4.0。仓库：<https://github.com/Richardsqg/hengxiao-yiyun>。
+
+## 当前首选：1.4.2 Intel Mac / Windows桌面包
+
+[固定版本完整下载](https://github.com/Richardsqg/hengxiao-yiyun/archive/refs/tags/v1.4.2-desktop.zip)，先登录有权限的GitHub账号，完整解压到新文件夹。Intel Mac需macOS13.5及更新，双击 `macOS_一键运行.command`；Windows10/11 x64双击 `Windows_一键运行.bat`。包内已有各自Node24.22运行环境，无需另装浏览器插件、数据库、npm依赖、Homebrew或Xcode。
+
+选1本机或2同Wi-Fi；第一次自己设置后台密码，之后自动打开私有“打开与扫码”面板。备份分别用 `macOS_备份数据.command` / `Windows_备份数据.bat`。业务内容在各自 `data/portable/`，不会提交Git或自动同步到Sites。Mac步骤、系统要求及双击权限备用方法见 [MACOS_GUIDE.md](MACOS_GUIDE.md)，功能维护见 [SOFTWARE_GUIDE.md](SOFTWARE_GUIDE.md)。
+
+这次只补Mac支持和平台提示，保留现有界面、素材及数据隔离。尚未在真实Intel Mac、Windows或手机上进行本轮启动和扫码验收；当前已进行的检查及限制见 [发布记录](PORTABLE_RELEASE.md)。下方旧源码启动方式留作兼容记录，不要求新便携包用户重复安装Node。
 
 ## 当前状态与保存位置
 

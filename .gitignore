@@ -19,3 +19,6 @@ deploy/Caddyfile
 *.key
 *.p12
 *.pfx
+
+# Mac 首次启动解压的运行程序与临时目录
+/runtime/macos/.extracted/

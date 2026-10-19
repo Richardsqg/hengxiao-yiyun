@@ -2,6 +2,8 @@
 
 本说明适用于在现有 1.4 项目上继续维护的独立版。项目保留一套应用、一个 GitHub 仓库，公众页面、管理后台、数据库和媒体服务一同运行。不要只复制 `dist/index.html`：图片浏览可以是网页，上传、登录、留言和 Excel 还需要随包提供的服务。
 
+**1.4.2新增 Intel Mac 启动支持**：macOS 13.5及以上，完整解压后双击 `macOS_一键运行.command`，备份用 `macOS_备份数据.command`。内置Intel Node24.22；正常使用不需要另装Node、npm、数据库或浏览器插件。与下方Windows方式使用相同菜单和功能、各自独立的 `data/portable/`；详见 [Mac下载、环境与操作步骤](MACOS_GUIDE.md)。
+
 ## 1. 在 Windows 电脑运行软件
 
 仓库为私有仓库，下载前请在浏览器登录拥有该仓库权限的 GitHub 账号（Richardsqg）。未登录时下载地址会显示404。观众在学校同WiFi扫码参观不需要GitHub账号或ChatGPT账号。
@@ -18,7 +20,7 @@
 
 本次1.4.1便携版本以及对应GitHub标签均已包含官方 Windows x64 Node.js 24.22.0 的 `runtime/node.exe` 和许可证，不必再安装Node。若使用未包含运行程序的旧源码，则需先安装 Node.js **24.15 或更高的 24.x，且低于 25**，再双击 `Windows_本机测试.bat`。它使用单独的 `data/local-preview/`；原 `Windows_启动.bat` 默认使用原有 `data/`。不同启动方式的数据目录不同，不要以为内容消失就删除目录或重新覆盖数据。
 
-Windows ARM、macOS 和 Linux 不属于此次 Windows x64 便携运行环境；源码独立版的运行要求仍以 `package.json` 为准。
+原1.4.1仅内置Windows x64运行环境。最新1.4.2另附Intel Mac运行环境；Windows ARM、Apple芯片Mac及Linux没有随本包附对应便携程序，源码运行要求仍以 `package.json` 为准。
 
 ## 2. 电脑、手机扫码与公网访问的区别
 
@@ -154,6 +156,6 @@ $env:DATA_DIR = Join-Path $PWD 'data\portable'
 
 ## 便携版一键备份
 
-暂停后台上传后，双击根目录 `Windows_备份数据.bat`。备份当前 `data/portable/`，副本保存在 `backups/`；请复制到另一台设备保存。该脚本不会自动备份旧启动方式的data目录或Sites数据库。恢复数据仍需先停止服务、核对目录并保留旧副本，不提供未经核对的自动覆盖恢复。
+暂停后台上传后，Windows双击根目录 `Windows_备份数据.bat`，Mac双击 `macOS_备份数据.command`。备份当前 `data/portable/`，副本保存在 `backups/`；请复制到另一台设备保存。该脚本不会自动备份旧启动方式的data目录或Sites数据库。恢复数据仍需先停止服务、核对目录并保留旧副本，不提供未经核对的自动覆盖恢复。
 
 软件局域网内容与现有Sites托管站分别保存；在电脑软件里编辑，不会自动同步到原Sites网址。将来若使用国内公网服务器，则以那台服务器的同一后台作为统一维护入口，观众扫码看到的就是该后台发布的内容。

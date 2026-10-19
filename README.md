@@ -1,6 +1,18 @@
-# 横小艺韵 · 1.4.1完整软件与源码
+# 横小艺韵 · 1.4.2完整软件与源码
 
-## Windows便携软件：先看这里
+## Intel Mac 与 Windows：最新桌面包
+
+先登录有仓库权限的 GitHub 账号，再下载 [1.4.2 完整桌面包](https://github.com/Richardsqg/hengxiao-yiyun/archive/refs/tags/v1.4.2-desktop.zip)。仓库为私有，未登录可能显示404。
+
+- **Intel Mac，macOS 13.5及更新**：完整解压后双击 `macOS_一键运行.command`；[Mac逐步指南及插件要求](docs/MACOS_GUIDE.md)。内置Intel Node24.22，无需另装Node或浏览器插件。
+- **Windows 10/11 x64**：完整解压后双击 `Windows_一键运行.bat`，内置Windows Node24.22。
+- 二者运行同一完整展馆和登录后台；选1仅本机，选2同Wi-Fi扫码。首次由你设置管理员密码，启动后打开私有扫码面板。
+- Mac备份用 `macOS_备份数据.command`，Windows用 `Windows_备份数据.bat`；两者各自的业务数据均保存在安装目录 `data/portable/`，不会自动跨电脑同步。
+- 查看、编辑、上传、360照片组、视频和Excel无需浏览器插件、Homebrew或Xcode；FFmpeg仅在另行压缩/转码时选装。
+
+本版新增Mac启动支持，没有修改已确认界面或覆盖旧数据。Mac真机、系统权限和手机扫码仍待现场验证。下方Windows1.4.1及旧启动记录保留为历史，当前下载和Mac操作以本节及Mac指南为准。
+
+## Windows便携软件：原1.4.1操作记录
 
 仓库为私有仓库，下载前请在浏览器登录拥有该仓库权限的 GitHub 账号（Richardsqg）。未登录时下载地址会显示404。观众在学校同WiFi扫码参观不需要GitHub账号或ChatGPT账号。
 

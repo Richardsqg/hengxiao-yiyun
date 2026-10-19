@@ -1,5 +1,11 @@
 # 横小艺韵：Codex 接手说明
 
+## 当前桌面版补充（2026-10-19，1.4.2）
+
+用户明确使用Intel芯片Mac。新增 `macOS_一键运行.command`、`macOS_备份数据.command` 与共享 `scripts/macos-runtime.sh`；官方darwin-x64 Node24.22压缩包在 `runtime/macos/`，SHA-256及来源JSON随包，首次解压目录 `.extracted/` 已忽略。最低macOS13.5，不自动降级Node。Windows启动入口继续保留。
+
+所有平台一键运行仍使用安装目录自己的 `data/portable/`；不覆盖旧data、不自动跨电脑同步。正常运行无需Node安装、npm依赖、数据库服务器、Homebrew/Xcode或浏览器插件。完整操作见 docs/MACOS_GUIDE.md；最新固定下载标签为v1.4.2-desktop，原v1.4.1-portable不可覆盖。Mac/Windows真实启动和手机网络测试不能用Linux stub检查冒充。
+
 这是已有项目的迁移副本，基线为 1.4.0（2026-10-13），交接整理日期为 2026-10-15。请先读 README.md、docs/PROJECT_CONTEXT.md、docs/ACCEPTANCE.md，再修改代码。
 
 ## 项目定位

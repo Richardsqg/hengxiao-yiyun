@@ -1,5 +1,16 @@
 # 验收与接续待办
 
+## 1.4.2 Intel Mac 补充（2026-10-19）
+
+- [x] 官方Intel Node24.22压缩包SHA-256核对，架构x86_64，官方及二进制最低系统13.5。
+- [x] 新增Mac一键运行及备份，沿用独立data/portable；私有面板用macOS open唤起，后台继续登录保护。
+- [x] macOS环境/插件表和初学者说明保存到MACOS_GUIDE.md；无需常规安装Node、npm依赖或浏览器插件。
+- [x] 本轮npm run build成功；npm test实际47项通过、0失败；8组Linux隔离stub检查及shell/MJS语法检查通过。
+- [ ] Intel Mac实际双击启动、下载安全提示、Safari及网络权限检查。
+- [ ] Mac与真实苹果/安卓手机、微信同WiFi扫码访问检查。
+
+以下1.4.1及更早记录继续保留为历史。新增Mac启动支持不等于国内公网正式上线。
+
 ## 交接基线
 - [x] 源码、已构建页面、三部影片、校徽和展示图片齐备。
 - [x] 1.4 界面要求已实现，见 PROJECT_CONTEXT.md。
