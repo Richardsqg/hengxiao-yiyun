@@ -129,11 +129,11 @@ export async function POST(request) {
         if (action === 'video-complete') {
             if (![1, 2, 3].includes(input.slot) || !/^videos\/[a-zA-Z0-9-]+\.mp4$/.test(input.key) || !Array.isArray(input.parts) || input.parts.length > 50 || !input.parts.length)
                 return json({ error: '上传参数无效' }, 400);
-            await bucket().resumeMultipartUpload(input.key, input.uploadId).complete(input.parts);
+            const completed = await bucket().resumeMultipartUpload(input.key, input.uploadId).complete(input.parts);
             const previous = (await gallery()).videos.find((v) => v.slot === input.slot);
-            const value = { hidden: previous?.hidden || false, captions: '', slot: input.slot, title: String(input.title || '展馆影像').slice(0, 60), description: String(input.description || '').slice(0, 300), url: '/api/media/' + input.key, poster: previous?.poster || '/assets/film-poster.jpg' };
+            const value = { media: completed.media, hidden: previous?.hidden || false, captions: '', slot: input.slot, title: String(input.title || '展馆影像').slice(0, 60), description: String(input.description || '').slice(0, 300), url: '/api/media/' + input.key, poster: previous?.poster || '/assets/film-poster.jpg' };
             await saveSetting('video-' + input.slot, value);
-            return json({ ok: true });
+            return json({ ok: true, media: completed.media });
         }
         if (action === 'video-abort') {
             if (!/^videos\/[a-zA-Z0-9-]+\.mp4$/.test(input.key))
@@ -143,7 +143,9 @@ export async function POST(request) {
         }
         return json({ error: '操作不存在' }, 400);
     }
-    catch {
+    catch (error) {
+        if (error?.status === 415)
+            return json({ error: error.message, code: error.code }, 415);
         return json({ error: '操作未完成，请检查网络后重试。' }, 503);
     }
 }

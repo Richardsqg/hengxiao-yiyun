@@ -11,7 +11,11 @@
     "start": "node runtime/server.mjs",
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs",
-    "backup": "node scripts/backup.mjs"
+    "backup": "node scripts/backup.mjs",
+    "media:install": "node scripts/install-media-supplement.mjs",
+    "media:import": "node scripts/import-first-video.mjs",
+    "preview:local": "node scripts/start-media-supplement.mjs --local",
+    "preview:lan": "node scripts/start-media-supplement.mjs --lan"
   },
   "devDependencies": {
     "react": "19.2.6",

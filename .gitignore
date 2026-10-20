@@ -8,3 +8,5 @@ deploy/Caddyfile
 /dist/assets/film-02.mp4
 /dist/assets/film-03.mp4
 /dist/assets/*.restore-*
+work/
+/dist/assets/film-01-qiasi.mp4

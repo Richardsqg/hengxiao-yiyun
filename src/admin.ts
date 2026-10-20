@@ -43,8 +43,8 @@ export async function POST(request:Request){
  if(action==='video-begin'){if(!Number.isFinite(input.size)||input.size<=0||input.size>400*1024*1024)return json({error:'视频需小于400MB。'},400);const key='videos/'+crypto.randomUUID()+'.mp4';const upload=await bucket().createMultipartUpload(key,{httpMetadata:{contentType:'video/mp4'},expectedSize:input.size});return json({key,uploadId:upload.uploadId});}
  if(action==='video-complete'){
  if(![1,2,3].includes(input.slot)||!/^videos\/[a-zA-Z0-9-]+\.mp4$/.test(input.key)||!Array.isArray(input.parts)||input.parts.length>50||!input.parts.length)return json({error:'上传参数无效'},400);
- await bucket().resumeMultipartUpload(input.key,input.uploadId).complete(input.parts);const previous=(await gallery()).videos.find((v:any)=>v.slot===input.slot);const value={hidden:previous?.hidden||false,captions:'',slot:input.slot,title:String(input.title||'展馆影像').slice(0,60),description:String(input.description||'').slice(0,300),url:'/api/media/'+input.key,poster:previous?.poster||'/assets/film-poster.jpg'};await saveSetting('video-'+input.slot,value);return json({ok:true});}
+ const completed=await bucket().resumeMultipartUpload(input.key,input.uploadId).complete(input.parts);const previous=(await gallery()).videos.find((v:any)=>v.slot===input.slot);const value={media:completed.media,hidden:previous?.hidden||false,captions:'',slot:input.slot,title:String(input.title||'展馆影像').slice(0,60),description:String(input.description||'').slice(0,300),url:'/api/media/'+input.key,poster:previous?.poster||'/assets/film-poster.jpg'};await saveSetting('video-'+input.slot,value);return json({ok:true,media:completed.media});}
  if(action==='video-abort'){if(!/^videos\/[a-zA-Z0-9-]+\.mp4$/.test(input.key))return json({error:'参数无效'},400);await bucket().resumeMultipartUpload(input.key,input.uploadId).abort();return json({ok:true});}
  return json({error:'操作不存在'},400);
- }catch{return json({error:'操作未完成，请检查网络后重试。'},503);}
+ }catch(error:any){if(error?.status===415)return json({error:error.message,code:error.code},415);return json({error:'操作未完成，请检查网络后重试。'},503);}
 }

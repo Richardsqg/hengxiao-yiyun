@@ -5,16 +5,36 @@ import Editor from './Editor';
 import OperationsStatus from './OperationsStatus';
 import VideoSettings from './VideoSettings';
 import { FAVORITES } from '../src/validation';
+import { type Mp4Inspection } from '../src/mp4-inspect';
+import { preflightVideo } from './video-preflight';
+import VideoPlayer from './VideoPlayer';
 async function action(name:string,data:any){const r=await fetch('/api/admin?action='+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const d:any=await r.json();if(!r.ok)throw new Error(d.error||'操作未完成');return d;}
 function VideoUpload({video,onDone}:{video:any,onDone:()=>void}){
  const [title,setTitle]=useState(video.title),[description,setDescription]=useState(video.description),[file,setFile]=useState<File|null>(null),[progress,setProgress]=useState(0),[busy,setBusy]=useState(false),[error,setError]=useState(''),[done,setDone]=useState(false);
- async function upload(){if(!file)return;setBusy(true);setError('');setDone(false);let job:any;try{
- if(!file.name.toLowerCase().endsWith('.mp4')||file.size>400*1024*1024)throw new Error('请选择400MB以内的 MP4 视频。');
+ const [checking,setChecking]=useState(false),[media,setMedia]=useState<Mp4Inspection|null>(null),[previewUrl,setPreviewUrl]=useState(''),[frameReady,setFrameReady]=useState(false),[confirmed,setConfirmed]=useState(false);
+ useEffect(()=>{
+  let cancelled=false;let url='';
+  setMedia(null);setPreviewUrl('');setFrameReady(false);setConfirmed(false);setError('');setDone(false);setProgress(0);
+  if(!file){setChecking(false);return;}
+  setChecking(true);
+  preflightVideo(file).then(result=>{
+   if(cancelled)return;
+   setMedia(result);url=URL.createObjectURL(file);setPreviewUrl(url);
+  }).catch(reason=>{if(!cancelled)setError(reason instanceof Error?reason.message:'无法检查这部影片，请重新导出为兼容MP4。');})
+    .finally(()=>{if(!cancelled)setChecking(false);});
+  return()=>{cancelled=true;if(url)URL.revokeObjectURL(url);};
+ },[file]);
+ async function upload(){if(!file||!media||!frameReady||!confirmed||checking)return;setBusy(true);setError('');setDone(false);let job:any;try{
  job=await action('video-begin',{size:file.size});const chunk=8*1024*1024,parts=[];
  for(let start=0;start<file.size;start+=chunk){const part=Math.floor(start/chunk)+1;const params=new URLSearchParams({action:'video-part',key:job.key,id:job.uploadId,part:String(part)});const r=await fetch('/api/admin?'+params,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:file.slice(start,start+chunk)});const result:any=await r.json();if(!r.ok)throw new Error(result.error);parts.push(result);setProgress(Math.round(Math.min(start+chunk,file.size)/file.size*95));}
  await action('video-complete',{key:job.key,uploadId:job.uploadId,parts,slot:video.slot,title,description});setProgress(100);setDone(true);onDone();
  }catch(e){setError(e instanceof Error?e.message:'上传失败');if(job){try{await action('video-abort',{...job,id:job.uploadId})}catch{}}}finally{setBusy(false)}}
- return <div className="upload-card"><p className="eyebrow">FILM 0{video.slot}</p><h3>{video.url?'已上线':'待上传'}</h3><label>影片标题<input maxLength={60} value={title} onChange={e=>setTitle(e.target.value)} disabled={busy}/></label><label>简短介绍<input maxLength={300} value={description} onChange={e=>setDescription(e.target.value)} disabled={busy}/></label><label>MP4 视频 · 最大400MB<input type="file" accept="video/mp4,.mp4" disabled={busy} onChange={e=>{setFile(e.target.files?.[0]||null);setDone(false);setProgress(0)}}/></label><button className="button light" disabled={!file||busy} onClick={upload}>{busy?<LoaderCircle size={16} className="spin"/>:<Upload size={16}/>} {busy?'正在上传':video.url?'上传并替换此影片':'上传并发布影片'}</button>{busy&&<div className="upload-progress"><progress value={progress} max="100"/>{progress}% · 请保持页面开启</div>}{done&&<p>✓ 影片已发布，观众刷新页面即可观看。</p>}{error&&<div className="error" role="alert">{error}</div>}{video.url&&<a href={video.url} target="_blank" rel="noreferrer" style={{display:'inline-flex',fontSize:11,marginTop:12}}>查看当前影片 ↗</a>}</div>
+ return <div className="upload-card"><p className="eyebrow">FILM 0{video.slot}</p><h3>{video.url?'已上线':'待上传'}</h3><label>影片标题<input maxLength={60} value={title} onChange={e=>setTitle(e.target.value)} disabled={busy}/></label><label>简短介绍<input maxLength={300} value={description} onChange={e=>setDescription(e.target.value)} disabled={busy}/></label><label>MP4 视频 · 最大400MB<input type="file" accept="video/mp4,.mp4" disabled={busy} onChange={e=>setFile(e.target.files?.[0]||null)}/></label>
+ {checking&&<p role="status">正在检查影片编码与视频轨道，暂不上传…</p>}
+ {media&&<p className="admin-hint">H.264 {media.video.profile} · {media.video.width} × {media.video.height} · {media.audio?'AAC音频':'无音轨'}。请先播放下方本地预览。</p>}
+ {previewUrl&&<div style={{aspectRatio:'16/9',position:'relative',background:'#081922',margin:'12px 0'}}><VideoPlayer key={previewUrl} src={previewUrl} label={'影片'+video.slot+'的本地待上传预览'} preload="auto" showIssue={false} onFrameReady={()=>setFrameReady(true)} onIssue={message=>{setFrameReady(false);setConfirmed(false);setError(message);}}/></div>}
+ {media&&<label className="switch-label"><input type="checkbox" checked={confirmed} disabled={!frameReady||busy} onChange={e=>setConfirmed(e.target.checked)}/>我已播放预览并确认画面正常，声音正常（原片无声除外）</label>}
+ <button className="button light" disabled={!file||!media||!frameReady||!confirmed||checking||busy} onClick={upload}>{busy?<LoaderCircle size={16} className="spin"/>:<Upload size={16}/>} {busy?'正在上传':video.url?'确认画面正常，上传并替换':'确认画面正常，上传并发布'}</button>{busy&&<div className="upload-progress"><progress value={progress} max="100"/>{progress}% · 请保持页面开启</div>}{done&&<p>✓ 影片已通过检查并发布，观众刷新页面即可观看。</p>}{error&&<div className="error" role="alert">{error}</div>}{video.url&&<a href={video.url} target="_blank" rel="noreferrer" style={{display:'inline-flex',fontSize:11,marginTop:12}}>查看当前影片 ↗</a>}<p className="admin-hint">支持400MB以内的兼容MP4。检测通过并完成上传后才替换当前影片；检查失败时原影片继续保留。</p></div>
 }
 function FramesUpload({framesBySlot,onDone}:{framesBySlot:Record<string,string[]>,onDone:()=>void}){
  const [slot,setSlot]=useState(1);const count=(framesBySlot[String(slot)]||[]).length;

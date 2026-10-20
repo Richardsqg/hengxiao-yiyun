@@ -1,0 +1,471 @@
+{
+  "version": "2026-10-20",
+  "crownSlot": 1,
+  "frameCount": 91,
+  "width": 1600,
+  "height": 1600,
+  "source": "用户上传：凤冠360_网页轻量包_91帧.zip",
+  "frames": [
+    {
+      "path": "/assets/crown-01-frame-001.webp",
+      "bytes": 421192,
+      "sha256": "5315d648768ab87d83cccc822c01472a9846174759ce068491b0c4f1c05eb164"
+    },
+    {
+      "path": "/assets/crown-01-frame-002.webp",
+      "bytes": 419328,
+      "sha256": "b403526d7c861998a3bbb43aa12d20ac5fe4553632774b75488d8ba819761d49"
+    },
+    {
+      "path": "/assets/crown-01-frame-003.webp",
+      "bytes": 420304,
+      "sha256": "2f11339dea570cbda5cd60784f43cbec71496fd9e2994986c410d44344f402f5"
+    },
+    {
+      "path": "/assets/crown-01-frame-004.webp",
+      "bytes": 418728,
+      "sha256": "81d1bd6bb4e83b0ea0449ee5844789fdc63b3e7f8248b0bfe5a6e082d163fb25"
+    },
+    {
+      "path": "/assets/crown-01-frame-005.webp",
+      "bytes": 416562,
+      "sha256": "32a31cf9e7e656b7df186240ee6ddd0020aec3e98aa18214562e0ac4a7a49695"
+    },
+    {
+      "path": "/assets/crown-01-frame-006.webp",
+      "bytes": 409418,
+      "sha256": "98824db2be03777890cbfb0dcef4c04b3da98b1ac2868dc916c0488c2fd9f9df"
+    },
+    {
+      "path": "/assets/crown-01-frame-007.webp",
+      "bytes": 399932,
+      "sha256": "921595e39783c11d7bcf903fd6e73e595d0a838e53b5c3511ef2cd914d8d4924"
+    },
+    {
+      "path": "/assets/crown-01-frame-008.webp",
+      "bytes": 388676,
+      "sha256": "bfc640d0401e5ba24fd0804cd34cda735aa2623dc1deacd9052a3959c2171914"
+    },
+    {
+      "path": "/assets/crown-01-frame-009.webp",
+      "bytes": 385904,
+      "sha256": "f1b7091519260aaef347b526cd0cf4290a0a8c34b81305ba07b8caa165994faa"
+    },
+    {
+      "path": "/assets/crown-01-frame-010.webp",
+      "bytes": 372138,
+      "sha256": "d2207b8650edaac2de5f1becb54e89a17a1ed97decbd26fa4bc9773a6e973bf5"
+    },
+    {
+      "path": "/assets/crown-01-frame-011.webp",
+      "bytes": 364524,
+      "sha256": "c732196b1725bfbec16bad35c6b5dd3d99138e569d0b4fd608eb257af0914602"
+    },
+    {
+      "path": "/assets/crown-01-frame-012.webp",
+      "bytes": 359912,
+      "sha256": "b2a9e6c8a111ab0b3068e3b8fc2099cfdd0c48d49eb1e78cd34b61c29c95acd0"
+    },
+    {
+      "path": "/assets/crown-01-frame-013.webp",
+      "bytes": 352548,
+      "sha256": "82ee736108af10503741b5196908379c50f8b883aacbadd794776485d06b0b6c"
+    },
+    {
+      "path": "/assets/crown-01-frame-014.webp",
+      "bytes": 349136,
+      "sha256": "9246dc6eb99fc19085dc511e3bbc132c7d692302edd6f93f59ead2e2a8fd0156"
+    },
+    {
+      "path": "/assets/crown-01-frame-015.webp",
+      "bytes": 349090,
+      "sha256": "5b46b9b1e5f395a7cccdfdc985cd69761b4692e3f7add6ef4687394ad279026c"
+    },
+    {
+      "path": "/assets/crown-01-frame-016.webp",
+      "bytes": 351296,
+      "sha256": "85c3511fc9194dd15f488265c9c185044fddfc565e65cce4d49bf3cf89bcc7b2"
+    },
+    {
+      "path": "/assets/crown-01-frame-017.webp",
+      "bytes": 351978,
+      "sha256": "bec7709fd8e1f731495294ca1c0e6a815dc438475970977b115d450ee5dfe417"
+    },
+    {
+      "path": "/assets/crown-01-frame-018.webp",
+      "bytes": 356878,
+      "sha256": "6e5b1145f457b80d443586fcc765fc8397f30cb22308c55ee851599fb9f2a423"
+    },
+    {
+      "path": "/assets/crown-01-frame-019.webp",
+      "bytes": 359084,
+      "sha256": "204fa468ef7d7b8dfa2d96d12641a26b817a325184a19d6926fc290ac4c2e473"
+    },
+    {
+      "path": "/assets/crown-01-frame-020.webp",
+      "bytes": 358566,
+      "sha256": "ca08949be3d65c18b3da25c991e060f2c4b0f69fe014a0472be037e166521364"
+    },
+    {
+      "path": "/assets/crown-01-frame-021.webp",
+      "bytes": 360850,
+      "sha256": "8646e5f239dd264d0021be7edb916e4d77b3291f54154ccb592b990457e79ca5"
+    },
+    {
+      "path": "/assets/crown-01-frame-022.webp",
+      "bytes": 364244,
+      "sha256": "416107a14a45c26d3dabd1a06361002bc8c7f284e6fda54f8e74530d7a07b668"
+    },
+    {
+      "path": "/assets/crown-01-frame-023.webp",
+      "bytes": 363070,
+      "sha256": "7b607d5554c993af36e712c63fde290e8427fa63c90ca17750ad222b343290e5"
+    },
+    {
+      "path": "/assets/crown-01-frame-024.webp",
+      "bytes": 363418,
+      "sha256": "a14846bbba9b3f38dcbc2b9148808642fb468db1dd55d9d39f055004c74f4f59"
+    },
+    {
+      "path": "/assets/crown-01-frame-025.webp",
+      "bytes": 367326,
+      "sha256": "4475f8b6f20733c78bf473e20407570149b4eb9feda9df4f7a75996b3241837b"
+    },
+    {
+      "path": "/assets/crown-01-frame-026.webp",
+      "bytes": 375698,
+      "sha256": "4bf151d2a69db85a5a1f20bdc79cd40db7ace01cb141476af8613bb3f19dc0c5"
+    },
+    {
+      "path": "/assets/crown-01-frame-027.webp",
+      "bytes": 377416,
+      "sha256": "68ee60f7a4f7bba8d7b9599c519b0df30ef3de47b31429e321c8852eea7d7898"
+    },
+    {
+      "path": "/assets/crown-01-frame-028.webp",
+      "bytes": 384332,
+      "sha256": "0a55117ec84ba223b72daed9cdc8c743431a0f7ee4a18eeabeacc342b9b23117"
+    },
+    {
+      "path": "/assets/crown-01-frame-029.webp",
+      "bytes": 383752,
+      "sha256": "4d12e7a22bb8baa44e6b2921a405e2920f7dcbc110be3667da3969dba4e3be62"
+    },
+    {
+      "path": "/assets/crown-01-frame-030.webp",
+      "bytes": 385106,
+      "sha256": "1117361858382c639060b8a559d2c6a53498c4e6794b2bed9f1a513729f970c8"
+    },
+    {
+      "path": "/assets/crown-01-frame-031.webp",
+      "bytes": 383414,
+      "sha256": "5452237f090413250dc9565ba65916bf45da98676902912414247d0a9289f74a"
+    },
+    {
+      "path": "/assets/crown-01-frame-032.webp",
+      "bytes": 374684,
+      "sha256": "abb210112430b7da8d0f7d4f3e3c5e2fae5c9801130e23274dab7da3068efed2"
+    },
+    {
+      "path": "/assets/crown-01-frame-033.webp",
+      "bytes": 372386,
+      "sha256": "69874c16918f2c70ab6ad93bfbccfc0c966bb8cddf8ce16623cca9bccb09aa34"
+    },
+    {
+      "path": "/assets/crown-01-frame-034.webp",
+      "bytes": 369340,
+      "sha256": "d04c4e687767448e4292e5c2dab7b4788d7640279133b6771f015faa8269aeb6"
+    },
+    {
+      "path": "/assets/crown-01-frame-035.webp",
+      "bytes": 368950,
+      "sha256": "0904a072cd76d54125ba7ef0fa3cbe9fde24aff45cba4765dc75122d8eca4c55"
+    },
+    {
+      "path": "/assets/crown-01-frame-036.webp",
+      "bytes": 369106,
+      "sha256": "c0f9b6cf07c3a304ef026d3f88f0849662732c2013e53c3799e5efd56ea6f4fe"
+    },
+    {
+      "path": "/assets/crown-01-frame-037.webp",
+      "bytes": 359104,
+      "sha256": "c10a29a55597f51c4faf2e70da350e285c7000180a85feb7463ee0d8cf656081"
+    },
+    {
+      "path": "/assets/crown-01-frame-038.webp",
+      "bytes": 367510,
+      "sha256": "d50303036c7161ae7aef40565d4c81aac57a2e0f3b01e7cce71abe9380eac43d"
+    },
+    {
+      "path": "/assets/crown-01-frame-039.webp",
+      "bytes": 369428,
+      "sha256": "cc3eceb3590043d992648cfe835407460eb42c4b4657c8dcb27ca4062eb656c2"
+    },
+    {
+      "path": "/assets/crown-01-frame-040.webp",
+      "bytes": 366432,
+      "sha256": "53b9067ce2dade14f93eeabeef01f25643b1f32c814ae6de59a674e3670d8d10"
+    },
+    {
+      "path": "/assets/crown-01-frame-041.webp",
+      "bytes": 361598,
+      "sha256": "1fae09690d3edb76b0a3a0701c2ed16c1becf7640d2b01eee1463d9300a9a5e4"
+    },
+    {
+      "path": "/assets/crown-01-frame-042.webp",
+      "bytes": 360862,
+      "sha256": "2cbb9bbf7a9c43313219df6040e76831f7260dba89f99842ccb0c92c25c464af"
+    },
+    {
+      "path": "/assets/crown-01-frame-043.webp",
+      "bytes": 363506,
+      "sha256": "0255ccffd8ff29d66241a3add59c9b9934e3c39d01bc54cf40d831d554bfe32a"
+    },
+    {
+      "path": "/assets/crown-01-frame-044.webp",
+      "bytes": 364954,
+      "sha256": "8dd768c2c8877c6f62aa350422b0f09206ed2679a974ae2214a5a6c8814003b4"
+    },
+    {
+      "path": "/assets/crown-01-frame-045.webp",
+      "bytes": 363952,
+      "sha256": "c944b597666a4403680184a63ce95aa22f14fca7fc2680cf9a1942487f30a73e"
+    },
+    {
+      "path": "/assets/crown-01-frame-046.webp",
+      "bytes": 364960,
+      "sha256": "958c5e186fc6732b870c83671ced3649c31f5bd334c054def950973d026bcea9"
+    },
+    {
+      "path": "/assets/crown-01-frame-047.webp",
+      "bytes": 364586,
+      "sha256": "b62ab7ed768a33ab67e6571e9051d3b257477fae1863a5b20caeeefbd51a509b"
+    },
+    {
+      "path": "/assets/crown-01-frame-048.webp",
+      "bytes": 364050,
+      "sha256": "4677977147c21872071d7ed125beec3933f9422b0b77ae50b4aff53186505122"
+    },
+    {
+      "path": "/assets/crown-01-frame-049.webp",
+      "bytes": 361222,
+      "sha256": "f3fa735e11d8c9a3a28631362cf321f87d521c4c0906d0dab6b190e7974846ac"
+    },
+    {
+      "path": "/assets/crown-01-frame-050.webp",
+      "bytes": 350418,
+      "sha256": "8f02ff62e11ad01686c185f2e0a2006c9a062a9b91bfebd856c3f382666621a1"
+    },
+    {
+      "path": "/assets/crown-01-frame-051.webp",
+      "bytes": 352386,
+      "sha256": "e9afc941090b04306c3d5ae755bda3bf2f21ff8a94d33609ad3a8f151b8a13a7"
+    },
+    {
+      "path": "/assets/crown-01-frame-052.webp",
+      "bytes": 348744,
+      "sha256": "9992d770e4bc8601bb891a3877f36125c555acd645c10b8b70adad44144e0eea"
+    },
+    {
+      "path": "/assets/crown-01-frame-053.webp",
+      "bytes": 351772,
+      "sha256": "8fffdbad06c2058e8893de08d00f2d636216da91224fe83fdc3b2c9d52584706"
+    },
+    {
+      "path": "/assets/crown-01-frame-054.webp",
+      "bytes": 352880,
+      "sha256": "da643dad808586f8768b01e6212f1cb57315967f2c726d5e0f39f2b33a50d528"
+    },
+    {
+      "path": "/assets/crown-01-frame-055.webp",
+      "bytes": 350390,
+      "sha256": "bd02d6bea1894baa19a952b89682832b474774cedc0b1219aeecd96cc44b9d8c"
+    },
+    {
+      "path": "/assets/crown-01-frame-056.webp",
+      "bytes": 349650,
+      "sha256": "5c561d904d97838eefa296dd4beac6c1d2ee9e4d8425d98692b80e526ea882b4"
+    },
+    {
+      "path": "/assets/crown-01-frame-057.webp",
+      "bytes": 348902,
+      "sha256": "b93454ac974c037f03dcdf233d1050c50cec91188a973da105571b538a562643"
+    },
+    {
+      "path": "/assets/crown-01-frame-058.webp",
+      "bytes": 346780,
+      "sha256": "72ffa7edf023e51c41f230d99bf96909feb36cadc8da368a846c9a94753840c9"
+    },
+    {
+      "path": "/assets/crown-01-frame-059.webp",
+      "bytes": 344046,
+      "sha256": "4be8ee5759ca1a09023216d61e282029a50e70ff8e2c184140007de8f1f1823c"
+    },
+    {
+      "path": "/assets/crown-01-frame-060.webp",
+      "bytes": 340846,
+      "sha256": "a7c1af9f96893228b6821dcbab8a4f0c414e96d3177c3ac80deb405cbb9c595c"
+    },
+    {
+      "path": "/assets/crown-01-frame-061.webp",
+      "bytes": 339866,
+      "sha256": "5d456a10c5165fb3f18f4484bd8916a10be26cda497cd520d2b1009eaf46e835"
+    },
+    {
+      "path": "/assets/crown-01-frame-062.webp",
+      "bytes": 336216,
+      "sha256": "49f1e29570416569da351f48185951d36fca1113ce43ce13f06bd62033d5baa9"
+    },
+    {
+      "path": "/assets/crown-01-frame-063.webp",
+      "bytes": 337024,
+      "sha256": "bc4b7a2dd3dc9095d401609f976b7ee90e07d374e6127a7b75144030c6887d8c"
+    },
+    {
+      "path": "/assets/crown-01-frame-064.webp",
+      "bytes": 339134,
+      "sha256": "ab3b5f9a5eec83d61616e897f503e96d131411029750d32b8d9c18392069e9ac"
+    },
+    {
+      "path": "/assets/crown-01-frame-065.webp",
+      "bytes": 336944,
+      "sha256": "2bc1d5424e944d95d1969f201e587d04424e6bf9359f9ecf2a6a60894c6244ce"
+    },
+    {
+      "path": "/assets/crown-01-frame-066.webp",
+      "bytes": 333958,
+      "sha256": "731560270967b77de8044454bcd2581219ccb6e2a4e398e7e0a413ac5a118c4b"
+    },
+    {
+      "path": "/assets/crown-01-frame-067.webp",
+      "bytes": 335956,
+      "sha256": "4925f1646a212a1ece73eaa8bcca45a854fa56ec3509bb804d2d449070c147a4"
+    },
+    {
+      "path": "/assets/crown-01-frame-068.webp",
+      "bytes": 336662,
+      "sha256": "901f0aabd6bee2d492d0e976c94a324b7f0b234a517d57bb837ce21bbd3e2921"
+    },
+    {
+      "path": "/assets/crown-01-frame-069.webp",
+      "bytes": 333702,
+      "sha256": "1b77eb4527b2391afeb333f1e59869f4ec08612b5a4f055003e7b35745d78532"
+    },
+    {
+      "path": "/assets/crown-01-frame-070.webp",
+      "bytes": 335860,
+      "sha256": "5ad83a461815bdcf7c2b910a638eb1963f7e63291e743b62f75482516de71d33"
+    },
+    {
+      "path": "/assets/crown-01-frame-071.webp",
+      "bytes": 337422,
+      "sha256": "0bd8bbe353d342d44a515edc0c1fa711432468fa8280865bc2328e5991c96031"
+    },
+    {
+      "path": "/assets/crown-01-frame-072.webp",
+      "bytes": 335908,
+      "sha256": "53740a03748c97bb5db87a7dc97831379710d92362bad9ff84ae38db298d977c"
+    },
+    {
+      "path": "/assets/crown-01-frame-073.webp",
+      "bytes": 343384,
+      "sha256": "4d77602a31305416e7b62f84a992a7df506a233d3cb8ad0f4fc2fabfae705e40"
+    },
+    {
+      "path": "/assets/crown-01-frame-074.webp",
+      "bytes": 346340,
+      "sha256": "6d15c363181642f06094811472aab531d6ac6a970685124048020822eb852e92"
+    },
+    {
+      "path": "/assets/crown-01-frame-075.webp",
+      "bytes": 350708,
+      "sha256": "ac65bfd394e6955f8829635222680ce9487ff68dab2e71279df1a3b5f861c0ff"
+    },
+    {
+      "path": "/assets/crown-01-frame-076.webp",
+      "bytes": 357194,
+      "sha256": "54d7d956990b518e1a096aec00e5f1ebda9b1537b61135a5b1dd68bf847963a0"
+    },
+    {
+      "path": "/assets/crown-01-frame-077.webp",
+      "bytes": 357782,
+      "sha256": "bb9888b1314feec3eb3910b2ace734e8a3ad432d3d954692d89c476957526dff"
+    },
+    {
+      "path": "/assets/crown-01-frame-078.webp",
+      "bytes": 369352,
+      "sha256": "f9f218e6281ad5c26062be38ac0b7fea3f16f29ba63b6c2bdcf941b5b7b1726f"
+    },
+    {
+      "path": "/assets/crown-01-frame-079.webp",
+      "bytes": 380658,
+      "sha256": "a897e159bdae7ab69e4e4cc82438a31fad1216b0055aa83113063ef535694d5e"
+    },
+    {
+      "path": "/assets/crown-01-frame-080.webp",
+      "bytes": 388110,
+      "sha256": "66fd96d53f011b576cf14a09242e82f3bc50ef711429340245ce8db9f5e941f8"
+    },
+    {
+      "path": "/assets/crown-01-frame-081.webp",
+      "bytes": 398902,
+      "sha256": "e32b0b053ea805298241f594dbcff9d78835e03d3db35ae7e4c75f8e94c6809a"
+    },
+    {
+      "path": "/assets/crown-01-frame-082.webp",
+      "bytes": 403678,
+      "sha256": "d04bf8cd1b32ce57975da5a8fa93aae05895af47b441a55514534d8d93578c74"
+    },
+    {
+      "path": "/assets/crown-01-frame-083.webp",
+      "bytes": 413784,
+      "sha256": "2aa3574f8e053c6f112a0eb7c2f05caa53f070b9464ce60133929ee1905aa113"
+    },
+    {
+      "path": "/assets/crown-01-frame-084.webp",
+      "bytes": 413916,
+      "sha256": "da9bcf636173b86d13cc0ffa7a958312240168b31cbc3a6291bb3b07e543610b"
+    },
+    {
+      "path": "/assets/crown-01-frame-085.webp",
+      "bytes": 417572,
+      "sha256": "ed5ec40be7783d56e18292e624f9ddc966e9614845e45d523317edb8305c7db2"
+    },
+    {
+      "path": "/assets/crown-01-frame-086.webp",
+      "bytes": 417520,
+      "sha256": "6055b81697343fe6382a24c9504cc5a6d02cc8ab4a53ce64da866a8af76ea7d1"
+    },
+    {
+      "path": "/assets/crown-01-frame-087.webp",
+      "bytes": 418302,
+      "sha256": "7499241c220dc22d7ea4a143467870d053eb0fd95379d80cd8551b30c34a54b4"
+    },
+    {
+      "path": "/assets/crown-01-frame-088.webp",
+      "bytes": 421526,
+      "sha256": "08893a31c346fd3125bf376b399b56fcf4a8189b2a800ee3076bc7c007b981e3"
+    },
+    {
+      "path": "/assets/crown-01-frame-089.webp",
+      "bytes": 421824,
+      "sha256": "9929abb4e28be7eda8759ca0a39069fb797d233ef8fb7419135681875145417c"
+    },
+    {
+      "path": "/assets/crown-01-frame-090.webp",
+      "bytes": 421758,
+      "sha256": "e45cfdce0a5b4b60476ee0e603732ac07b95b5f5a11108e455de4203479a4b73"
+    },
+    {
+      "path": "/assets/crown-01-frame-091.webp",
+      "bytes": 422374,
+      "sha256": "2d6c1e87e3705f1c52c5847121ff89bf5dd9aa160eb4108157e9d7aec965b689"
+    }
+  ],
+  "video": {
+    "slot": 1,
+    "path": "/assets/film-01-qiasi.mp4",
+    "title": "掐丝珐琅",
+    "description": "掐丝珐琅课程视频 · 用户提供的本地素材。"
+  }
+}
