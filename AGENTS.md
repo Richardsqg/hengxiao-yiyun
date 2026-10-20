@@ -1,5 +1,9 @@
 # 横小艺韵：Codex 接手说明
 
+## 项目与环境边界
+
+本仓库仅为 `Richardsqg/hengxiao-yiyun` 展馆。每个新任务先在仓库根目录运行 `node .codex/verify-project.mjs`；若包名、Git remote 或目录不匹配，先停止修改并说明。京东助手已独立到 `Richardsqg/jd-helper`，不得在此继续开发、打包或保存它的构件。独立环境准备与后续新项目步骤见 `docs/CODEX_ENVIRONMENT.md`；环境脚本不会自动创建或发布用户账号中的云环境。
+
 这是已有项目的迁移副本，基线为 1.4.0（2026-10-13），交接整理日期为 2026-10-15。请先读 README.md、docs/PROJECT_CONTEXT.md、docs/ACCEPTANCE.md，再修改代码。
 
 ## 项目定位

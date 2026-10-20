@@ -1,0 +1,8 @@
+{
+  "repository": "Richardsqg/hengxiao-yiyun",
+  "packageName": "fenghua-mainland",
+  "environmentName": "hengxiao-yiyun-gallery",
+  "nodeMajor": 24,
+  "nodeMinimumMinor": 15,
+  "purpose": "横小艺韵展馆开发、构建与测试"
+}
