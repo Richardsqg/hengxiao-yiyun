@@ -9,9 +9,10 @@ import { installMediaSupplement } from './install-media-supplement.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export function lanAddresses(interfaces = networkInterfaces()) {
+  const priority = name => /^(en0|wi-?fi|wlan\d*|wireless)/i.test(name) ? 0 : /^(en\d+|ethernet|eth\d+)/i.test(name) ? 1 : 2;
   return Object.entries(interfaces)
-    .sort(([a], [b]) => (a === 'en0' ? -1 : b === 'en0' ? 1 : a.localeCompare(b)))
-    .flatMap(([name, entries]) => /^(utun|tun|tap|tailscale|docker|veth|br-)/.test(name) ? [] : (entries || [])
+    .sort(([a], [b]) => priority(a) - priority(b) || a.localeCompare(b))
+    .flatMap(([name, entries]) => /^(utun|tun|tap|tailscale|docker|veth|br-)|virtual|vmware|zerotier|wireguard|clash|sing-box/i.test(name) ? [] : (entries || [])
       .filter(item => !item.internal && (item.family === 'IPv4' || item.family === 4))
       .filter(item => /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(item.address))
       .map(item => ({ name, address: item.address })));
@@ -24,7 +25,7 @@ async function start() {
   const lan = process.argv.includes('--lan');
   const addresses = lanAddresses();
   const selected = process.env.LAN_IP || addresses[0]?.address;
-  if (lan && !addresses.some(item => item.address === selected)) throw new Error('未找到局域网地址。请先让 Mac 连上路由器 Wi-Fi 或网线，再启动。');
+  if (lan && !addresses.some(item => item.address === selected)) throw new Error('未找到局域网地址。请先让电脑连上路由器 Wi-Fi 或网线，再启动。');
   const port = Number(process.env.PORT || 3000);
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('PORT 应为1至65535之间的端口号。');
   const host = lan ? '0.0.0.0' : '127.0.0.1';
@@ -55,11 +56,11 @@ async function start() {
     server.close();
     throw new Error('原包未按所选模式监听，服务已停止。请保留原包并提供启动报错。');
   }
-  let openTarget = origin;
+  let openTarget = origin + (process.argv.includes('--admin') ? '/admin' : '');
   if (lan) {
     const { createQrArtifacts } = await import('../runtime/qr.mjs');
     const { svg } = createQrArtifacts(origin);
-    const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>横小艺韵 · 手机扫码</title><style>body{font:20px system-ui;margin:40px auto;padding:0 24px;max-width:650px;background:#f5f2eb;color:#163745;text-align:center}svg{width:min(80vw,360px);height:auto}a{color:#124f68;word-break:break-all}p{line-height:1.7}</style><h1>手机扫码看展馆</h1><p>手机与 Mac 连接同一个路由器或 Wi-Fi，<br>用相机或微信扫描下方二维码。</p>${svg}<p><a href="${origin}">${origin}</a></p><p>Mac 上也可点击网址打开。<br>保持启动窗口开启；局域网浏览不需要翻墙。</p><p>若扫码打不开：允许 Node 接收传入连接；<br>避免使用开启访客隔离的 Wi-Fi。<br>换 Wi-Fi 后关闭启动窗口，重新启动并扫描新二维码。</p></html>`;
+    const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>横小艺韵 · 手机扫码</title><style>body{font:20px system-ui;margin:40px auto;padding:0 24px;max-width:650px;background:#f5f2eb;color:#163745;text-align:center}svg{width:min(80vw,360px);height:auto}a{color:#124f68;word-break:break-all}p{line-height:1.7}</style><h1>手机扫码看展馆</h1><p>手机与电脑连接同一个路由器或 Wi-Fi，<br>用相机或微信扫描下方二维码。</p>${svg}<p><a href="${origin}">${origin}</a></p><p><a href="${origin}/admin">电脑打开管理员后台</a></p><p>电脑上也可点击网址打开。<br>保持启动窗口开启；局域网浏览不需要翻墙。</p><p>若扫码打不开：允许 Node 接收传入连接；Windows 防火墙允许专用网络；<br>避免使用开启访客隔离的 Wi-Fi。<br>换 Wi-Fi 后关闭启动窗口，重新启动并扫描新二维码。</p></html>`;
     await mkdir(data, { recursive: true, mode: 0o700 });
     const connect = path.join(data, 'lan-connect.html');
     await writeFile(connect, html, { mode: 0o600 });
@@ -67,10 +68,15 @@ async function start() {
     console.log(`同 Wi-Fi 手机地址：${origin}\n扫码页：${connect}`);
   }
   console.log(`本次补充已启用：第一组91帧凤冠。${origin}\n请保持此窗口开启；按 Control+C 关闭服务。`);
+  console.log(`管理员后台：${origin}/admin`);
   const { firstVideoReady } = await import('../runtime/media-supplement.mjs');
   if (!firstVideoReady()) console.log('新视频尚未放入：请将原ZIP中的MP4放到 dist/assets/film-01-qiasi.mp4，然后重新启动。当前仍保留原第一部导览。');
   if (process.platform === 'darwin' && !process.argv.includes('--no-open')) {
     const browser = spawn('/usr/bin/open', [openTarget], { stdio: 'ignore' });
+    browser.on('error', () => console.log(`请手动打开：${openTarget}`));
+  }
+  if (process.platform === 'win32' && !process.argv.includes('--no-open')) {
+    const browser = spawn('explorer.exe', [openTarget], { stdio: 'ignore' });
     browser.on('error', () => console.log(`请手动打开：${openTarget}`));
   }
 }

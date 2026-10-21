@@ -1,5 +1,7 @@
 # 横小艺韵 · Codex 完整项目交接包
 
+1.4.3-desktop 完整部署包已整合91帧凤冠、放大后继续360旋转、视频上传编码检查与预览确认，以及Mac/Windows本机和同Wi-Fi扫码入口。下载的完整ZIP内置官方Node.js 24.22.0，无需另外安装Node或补丁；请先打开包内“开始使用.html”。[完整部署说明](docs/DESKTOP_1_4_3.html)。GitHub源码不重复提交运行环境二进制；维护者可用 `python scripts/package-desktop.py` 生成含运行环境的两个ZIP。
+
 2026-10-20 增量：第一展位接入用户提供的91帧凤冠序列；管理员视频上传增加编码检查、本地画面预览和发布前校验。151MB在400MiB上限内；有声音无画面的视频需要核实编码，不能仅修改文件后缀。安装与使用见 [Mac/Windows视频上传补充](docs/VIDEO_UPLOAD_FIX_20261020.md) 和 [凤冠360及Mac局域网补充](docs/MEDIA_SUPPLEMENT_20261020.md)。
 
 2026-10-21 增量：[Windows 360小添加包](docs/WINDOWS_CROWN360_20261021.md)可复用已解压的原91帧素材；[Mac/Windows详细操作手册](docs/DESKTOP_ADDONS_GUIDE_20261021.html)包含停止旧服务、两系统360添加和视频修复步骤，可离线打开。

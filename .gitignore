@@ -10,3 +10,6 @@ deploy/Caddyfile
 /dist/assets/*.restore-*
 work/
 /dist/assets/film-01-qiasi.mp4
+
+/.runtime/
+__pycache__/

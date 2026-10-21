@@ -31,6 +31,10 @@
 .film-summary .film-material-note{max-width:none;font-size:11px;line-height:1.8;color:#92adb9;margin-top:20px;padding-top:14px;border-top:1px solid #ffffff18}
 .zoom-stage{overscroll-behavior:contain;isolation:isolate;-webkit-user-select:none;user-select:none;touch-action:none}
 .zoom-stage img{pointer-events:none;transform-origin:center;transition:none!important;-webkit-user-drag:none}
+.spin-drag-tools{display:flex;justify-content:center;gap:10px;margin:8px 0}
+.spin-drag-tools button{min-height:40px;padding:7px 15px;border:1px solid #e7bf7240;border-radius:4px;color:#c4d5dc;font-size:12px}
+.spin-drag-tools button[aria-pressed=true]{background:#e7bf721c;border-color:var(--gold);color:var(--gold)}
+.spin-drag-tools button:disabled{opacity:.4;cursor:default}
 .gallery-modal .zoom-stage{margin:0;min-height:0}
 .gallery-modal .compact-tools{flex-wrap:wrap}
 .gallery-modal .lightbox-caption>.picture-arrows{margin-top:16px}

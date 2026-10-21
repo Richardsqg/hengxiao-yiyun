@@ -40,6 +40,7 @@
 - tests/：已有接口集成测试。
 - src/mp4-inspect.ts 与 runtime/video-validation.mjs：共享的视频轨道/编码检查。上传上限400MiB，发布前核对H.264 8位4:2:0与可选AAC-LC，不能只凭MP4后缀或ftyp标记发布。
 - 视频上传/播放补充和原视频兼容版导出见 docs/VIDEO_UPLOAD_FIX_20261020.md；凤冠与Mac本机/局域网增量说明见 docs/MEDIA_SUPPLEMENT_20261020.md。
+- 1.4.3-desktop整合部署见 docs/DESKTOP_1_4_3.html；scripts/package-desktop.py校验并打包官方Mac/Windows双架构Node，运行环境只进入发布ZIP，不提交Git。凤冠在放大后默认拖动旋转，可切换平移；旋转箭头、滑条和自动播放必须保留缩放与平移。针对交互的浏览器检查为 tests/zoom-spin-browser.py。
 
 ## 交付与验证
 针对变更做必要检查，不为简单文案/样式反复增加测试。只有业务代码改动或基线迁移风险时运行相关测试。

@@ -34,6 +34,13 @@ test('LAN discovery chooses physical private addresses and excludes VPN interfac
   ]);
 });
 
+test('Windows Wi-Fi takes priority over virtual adapters, Ethernet and VPN', () => {
+  const address = value => [{ address: value, family: 'IPv4', internal: false }];
+  assert.deepEqual(lanAddresses({ 'vEthernet (Default Switch)': address('172.22.1.1'), Tailscale: address('10.1.0.1'), 'VirtualBox Host-Only Network': address('192.168.56.1'), Ethernet: address('192.168.2.10'), 'Wi-Fi': address('192.168.1.10') }), [
+    { name: 'Wi-Fi', address: '192.168.1.10' }, { name: 'Ethernet', address: '192.168.2.10' },
+  ]);
+});
+
 test('incremental installer and local/LAN browsing, first-video import and configuration preservation', async t => {
   await mkdir(path.join(root, 'work'), { recursive: true });
   const folder = await mkdtemp(path.join(root, 'work/media-supplement-test-'));
