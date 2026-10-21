@@ -8,6 +8,7 @@ import { FAVORITES } from '../src/validation';
 import { type Mp4Inspection } from '../src/mp4-inspect';
 import { preflightVideo } from './video-preflight';
 import VideoPlayer from './VideoPlayer';
+import { notifyMediaChanged } from './media-events';
 async function action(name:string,data:any){const r=await fetch('/api/admin?action='+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const d:any=await r.json();if(!r.ok)throw new Error(d.error||'操作未完成');return d;}
 function VideoUpload({video,onDone}:{video:any,onDone:()=>void}){
  const [title,setTitle]=useState(video.title),[description,setDescription]=useState(video.description),[file,setFile]=useState<File|null>(null),[progress,setProgress]=useState(0),[busy,setBusy]=useState(false),[error,setError]=useState(''),[done,setDone]=useState(false);
@@ -27,7 +28,14 @@ function VideoUpload({video,onDone}:{video:any,onDone:()=>void}){
  async function upload(){if(!file||!media||!frameReady||!confirmed||checking)return;setBusy(true);setError('');setDone(false);let job:any;try{
  job=await action('video-begin',{size:file.size});const chunk=8*1024*1024,parts=[];
  for(let start=0;start<file.size;start+=chunk){const part=Math.floor(start/chunk)+1;const params=new URLSearchParams({action:'video-part',key:job.key,id:job.uploadId,part:String(part)});const r=await fetch('/api/admin?'+params,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:file.slice(start,start+chunk)});const result:any=await r.json();if(!r.ok)throw new Error(result.error);parts.push(result);setProgress(Math.round(Math.min(start+chunk,file.size)/file.size*95));}
- await action('video-complete',{key:job.key,uploadId:job.uploadId,parts,slot:video.slot,title,description});setProgress(100);setDone(true);onDone();
+ const expected='/api/media/'+job.key;
+ await action('video-complete',{key:job.key,uploadId:job.uploadId,parts,slot:video.slot,title,description});job=null;setProgress(100);
+ const response=await fetch('/api/gallery',{cache:'no-store'}),catalog=await response.json();
+ if(!response.ok)throw new Error('视频已保存，但未能核对公开页面，请刷新后台并点击“查看当前影片”确认。');
+ const published=catalog.videos?.find((entry:any)=>entry.slot===video.slot);
+ if(published?.hidden)throw new Error('视频已保存，但此影片处于隐藏状态。请在下方“影片封面、字幕与显示”取消隐藏并保存。');
+ if(published?.url!==expected)throw new Error('视频已保存，但公开页面读取的影片地址与新上传文件不同。请保留此提示，并确认正在使用同一套展馆。');
+ notifyMediaChanged();setDone(true);onDone();
  }catch(e){setError(e instanceof Error?e.message:'上传失败');if(job){try{await action('video-abort',{...job,id:job.uploadId})}catch{}}}finally{setBusy(false)}}
  return <div className="upload-card"><p className="eyebrow">FILM 0{video.slot}</p><h3>{video.url?'已上线':'待上传'}</h3><label>影片标题<input maxLength={60} value={title} onChange={e=>setTitle(e.target.value)} disabled={busy}/></label><label>简短介绍<input maxLength={300} value={description} onChange={e=>setDescription(e.target.value)} disabled={busy}/></label><label>MP4 视频 · 最大400MB<input type="file" accept="video/mp4,.mp4" disabled={busy} onChange={e=>setFile(e.target.files?.[0]||null)}/></label>
  {checking&&<p role="status">正在检查影片编码与视频轨道，暂不上传…</p>}

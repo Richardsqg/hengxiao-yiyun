@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import {Crown,BookOpen,Play,MessageCircle,X,Plus,Minus,RotateCcw,Maximize2,ChevronLeft,ChevronRight,Pause,Share2,Download,Copy,Check,Image as ImageIcon} from 'lucide-react';
 import initial from '../src/exhibition.json';
 import qr from '../src/qrcodegen';
@@ -8,6 +8,7 @@ import Modal from './Modal';
 import ZoomStage from './ZoomStage';
 import ImageGallery from './ImageGallery';
 import VideoPlayer from './VideoPlayer';
+import { MEDIA_CHANGED } from './media-events';
 const tabs=[{id:'crown',label:'凤冠鉴赏',icon:Crown},{id:'culture',label:'文化寻根',icon:BookOpen},{id:'films',label:'影像展厅',icon:Play},{id:'voices',label:'观展留言',icon:MessageCircle}];
 function ShareCard({title,artifact,section,onClose}:{title:string;artifact:any;section:string;onClose:()=>void}){
  const [image,setImage]=useState(''),[message,setMessage]=useState(''),[error,setError]=useState('');const url=useRef('');
@@ -18,8 +19,34 @@ function ShareCard({title,artifact,section,onClose}:{title:string;artifact:any;s
 }
 export default function Home({preview=false}:{preview?:boolean}){
  const [active,setActive]=useState('crown'),[doc,setDoc]=useState<any>(initial),[course,setCourse]=useState(0),[stage,setStage]=useState(0),[aspect,setAspect]=useState(0),[crown,setCrown]=useState(0),[film,setFilm]=useState(0),[videos,setVideos]=useState<any[]>(initial.videos),[frames,setFrames]=useState<Record<string,string[]>>({}),[sharing,setSharing]=useState(false),[error,setError]=useState('');
- useEffect(()=>{const sync=()=>{const id=location.hash.slice(1);if(tabs.some(t=>t.id===id))setActive(id)};const enter=()=>{setActive('crown');history.replaceState(history.state,'',location.pathname+location.search+'#crown');window.scrollTo({top:0})};const onShow=(event:PageTransitionEvent)=>{if(event.persisted)enter()};enter();addEventListener('pageshow',onShow);addEventListener('hashchange',sync);let stop=false;fetch('/api/gallery'+(preview?'?preview=1':'')).then(async r=>{const d:any=await r.json();if(!r.ok)throw new Error(d.error);if(!stop){if(d.document?.courses)setDoc(d.document);setVideos(d.videos);setFrames(d.crownFrames||{'1':d.frames||[]})}}).catch(()=>{if(!stop)setError('更新暂未同步，正在显示内置展陈。请刷新重试。')});return()=>{stop=true;removeEventListener('hashchange',sync);removeEventListener('pageshow',onShow)}},[preview]);
- function navigate(id:string){setActive(id);history.replaceState(null,'','#'+id);window.scrollTo({top:0,behavior:'smooth'})}
+ const pendingCatalog=useRef<AbortController|null>(null);
+ const loadCatalog=useCallback(()=>{
+  pendingCatalog.current?.abort();const controller=new AbortController();pendingCatalog.current=controller;
+  fetch('/api/gallery'+(preview?'?preview=1':''),{cache:'no-store',signal:controller.signal}).then(async response=>{
+   const catalog=await response.json();if(!response.ok)throw new Error(catalog.error);
+   if(controller.signal.aborted)return;
+   if(catalog.document?.courses)setDoc((current:any)=>JSON.stringify(current)===JSON.stringify(catalog.document)?current:catalog.document);
+   setVideos(current=>JSON.stringify(current)===JSON.stringify(catalog.videos)?current:catalog.videos);
+   const nextFrames=catalog.crownFrames||{'1':catalog.frames||[]};
+   setFrames(current=>JSON.stringify(current)===JSON.stringify(nextFrames)?current:nextFrames);setError('');
+  }).catch(()=>{if(!controller.signal.aborted)setError('更新暂未同步，请刷新重试。')});
+ },[preview]);
+ useEffect(()=>{
+  const sync=()=>{const id=location.hash.slice(1);if(tabs.some(tab=>tab.id===id))setActive(id)};
+  const enter=()=>{setActive('crown');history.replaceState(history.state,'',location.pathname+location.search+'#crown');window.scrollTo({top:0})};
+  const onShow=(event:PageTransitionEvent)=>{if(event.persisted)enter()};enter();
+  addEventListener('pageshow',onShow);addEventListener('hashchange',sync);
+  return()=>{removeEventListener('hashchange',sync);removeEventListener('pageshow',onShow)};
+ },[preview]);
+ useEffect(()=>{
+  loadCatalog();
+  const onVisible=()=>{if(document.visibilityState==='visible')loadCatalog()};
+  const onStorage=(event:StorageEvent)=>{if(event.key===MEDIA_CHANGED)loadCatalog()};
+  addEventListener('focus',loadCatalog);addEventListener(MEDIA_CHANGED,loadCatalog);addEventListener('storage',onStorage);
+  document.addEventListener('visibilitychange',onVisible);
+  return()=>{pendingCatalog.current?.abort();removeEventListener('focus',loadCatalog);removeEventListener(MEDIA_CHANGED,loadCatalog);removeEventListener('storage',onStorage);document.removeEventListener('visibilitychange',onVisible)};
+ },[loadCatalog]);
+ function navigate(id:string){setActive(id);history.replaceState(null,'','#'+id);if(id==='films')loadCatalog();window.scrollTo({top:0,behavior:'smooth'})}
  const current=doc.courses[course],artifact=doc.crowns[crown],sequence=frames[String(artifact.slot)]||[],spin=sequence.length>=24,showBrand=active==='voices',selectedVideo=videos[film],filmCourse=doc.courses[Math.max(0,(selectedVideo?.slot||1)-1)];
  return <div className={'exhibition-page section-'+active}><a className="skip-link" href="#main">跳至展览内容</a>{preview&&<div className="preview-banner">管理员草稿预览 · 尚未公开发布 <a href="/admin">返回编辑</a></div>}<header className={'exhibition-header '+(active==='crown'?'crown-page-header':!showBrand?'nav-only':'')}>
  {active==='crown'&&<h1 className="crown-page-title">凤冠360展示</h1>}

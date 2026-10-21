@@ -79,6 +79,29 @@ test('151 MiB valid H264/AAC MP4 passes chunked upload unchanged, playback range
   } finally { await input.close(); }
 });
 
+test('desktop restart keeps the uploaded first movie and reports it without requesting a manual asset', async () => {
+  const stopped = once(child, 'exit'); child.kill('SIGTERM'); await stopped;
+  const savedConfig = await readFile(path.join(folder, 'config.json'), 'utf8');
+  const port = new URL(origin).port;
+  child = spawn(process.execPath, ['scripts/start-media-supplement.mjs', '--local', '--no-open'], { cwd: root, env: { ...process.env, DATA_DIR: folder, PORT: port }, stdio: ['ignore', 'pipe', 'pipe'] });
+  let output = '';
+  await new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Desktop restart timed out: ' + output)), 15000);
+    child.stdout.on('data', bytes => { output += bytes; if (output.includes('影片1当前来源：后台已上传的视频')) { clearTimeout(timer); resolve(); } });
+    child.stderr.on('data', bytes => output += bytes);
+    child.once('exit', code => { clearTimeout(timer); reject(new Error('Desktop restart exited ' + code + ': ' + output)); });
+  });
+  assert.doesNotMatch(output, /新视频尚未放入/);
+  assert.equal((await (await request('/api/gallery')).json()).videos[0].url, published);
+  const connect = await request('/connect');
+  assert.equal(connect.status, 200);
+  const html = await connect.text();
+  assert.ok(html.includes(origin + '/admin'));
+  assert.ok(html.includes('打开展馆主网页'));
+  assert.doesNotMatch(html, /file:\/\/\//);
+  assert.equal(await readFile(path.join(folder, 'config.json'), 'utf8'), savedConfig);
+});
+
 test('audio-only, HEVC and damaged MP4 cannot replace the published video; failures explain encoding and leave no final file', async () => {
   for (const fixture of ['audio-only.mp4', 'hevc-aac.mp4', 'damaged.mp4']) {
     let file = path.join(root, 'tests/fixtures', fixture);

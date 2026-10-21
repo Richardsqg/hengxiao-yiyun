@@ -1,11 +1,13 @@
 import { networkInterfaces } from 'node:os';
 import { access, mkdir, writeFile } from 'node:fs/promises';
-import { spawnSync, spawn } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { once } from 'node:events';
 import net from 'node:net';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { installMediaSupplement } from './install-media-supplement.mjs';
+import { connectPage } from '../runtime/connect-page.mjs';
+import { openBrowser } from './open-browser.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export function lanAddresses(interfaces = networkInterfaces()) {
@@ -47,7 +49,7 @@ async function start() {
   process.env.HOST = host;
   process.env.LOCAL_PREVIEW = '0';
   // Only this process uses the local address; the saved domain, password and data stay intact.
-  const { config } = await import('../runtime/storage.mjs');
+  const { config, gallery } = await import('../runtime/storage.mjs');
   config.origin = origin;
   const { server } = await import('../runtime/server.mjs');
   if (!server?.listening) await once(server, 'listening');
@@ -58,27 +60,26 @@ async function start() {
   }
   let openTarget = origin + (process.argv.includes('--admin') ? '/admin' : '');
   if (lan) {
-    const { createQrArtifacts } = await import('../runtime/qr.mjs');
-    const { svg } = createQrArtifacts(origin);
-    const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>横小艺韵 · 手机扫码</title><style>body{font:20px system-ui;margin:40px auto;padding:0 24px;max-width:650px;background:#f5f2eb;color:#163745;text-align:center}svg{width:min(80vw,360px);height:auto}a{color:#124f68;word-break:break-all}p{line-height:1.7}</style><h1>手机扫码看展馆</h1><p>手机与电脑连接同一个路由器或 Wi-Fi，<br>用相机或微信扫描下方二维码。</p>${svg}<p><a href="${origin}">${origin}</a></p><p><a href="${origin}/admin">电脑打开管理员后台</a></p><p>电脑上也可点击网址打开。<br>保持启动窗口开启；局域网浏览不需要翻墙。</p><p>若扫码打不开：允许 Node 接收传入连接；Windows 防火墙允许专用网络；<br>避免使用开启访客隔离的 Wi-Fi。<br>换 Wi-Fi 后关闭启动窗口，重新启动并扫描新二维码。</p></html>`;
+    const html = connectPage(origin);
     await mkdir(data, { recursive: true, mode: 0o700 });
     const connect = path.join(data, 'lan-connect.html');
     await writeFile(connect, html, { mode: 0o600 });
-    openTarget = pathToFileURL(connect).href;
+    openTarget = origin + '/connect';
     console.log(`同 Wi-Fi 手机地址：${origin}\n扫码页：${connect}`);
   }
   console.log(`本次补充已启用：第一组91帧凤冠。${origin}\n请保持此窗口开启；按 Control+C 关闭服务。`);
   console.log(`管理员后台：${origin}/admin`);
-  const { firstVideoReady } = await import('../runtime/media-supplement.mjs');
-  if (!firstVideoReady()) console.log('新视频尚未放入：请将原ZIP中的MP4放到 dist/assets/film-01-qiasi.mp4，然后重新启动。当前仍保留原第一部导览。');
-  if (process.platform === 'darwin' && !process.argv.includes('--no-open')) {
-    const browser = spawn('/usr/bin/open', [openTarget], { stdio: 'ignore' });
-    browser.on('error', () => console.log(`请手动打开：${openTarget}`));
+  console.log(`展馆主网页：${origin}/\n二维码与入口：${origin}/connect\n当前数据目录：${data}`);
+  const first = (await gallery()).videos.find(video => video.slot === 1);
+  if (first?.url?.startsWith('/api/media/videos/')) {
+    console.log(`影片1当前来源：后台已上传的视频${first.hidden ? '（当前设为隐藏）' : ''}。`);
+  } else if (first?.url === '/assets/film-01-qiasi.mp4') {
+    console.log('影片1当前来源：已手动导入的本地视频。');
+  } else {
+    console.log('影片1当前使用内置导览。可在管理员后台“影片与360°”上传替换，无需手动放入文件夹。');
   }
-  if (process.platform === 'win32' && !process.argv.includes('--no-open')) {
-    const browser = spawn('explorer.exe', [openTarget], { stdio: 'ignore' });
-    browser.on('error', () => console.log(`请手动打开：${openTarget}`));
-  }
+  await writeFile(path.join(data, 'desktop-session.json'), JSON.stringify({ origin }) + '\n', { mode: 0o600 });
+  if (['darwin', 'win32'].includes(process.platform) && !process.argv.includes('--no-open')) await openBrowser(openTarget);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

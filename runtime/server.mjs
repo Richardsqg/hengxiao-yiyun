@@ -12,6 +12,7 @@ import { GET as adminGet, POST as adminPost } from './admin.mjs';
 import { POST as feedbackPost } from './feedback.mjs';
 import { contentApi,publicDocument,videoMeta } from './content.mjs';
 import { createQrArtifacts } from './qr.mjs';
+import { connectPage } from './connect-page.mjs';
 
 const localPreview=process.env.LOCAL_PREVIEW==='1';
 const port=Number(process.env.PORT||3000);
@@ -35,6 +36,7 @@ const headers=new Headers();for(const [k,v] of Object.entries(req.headers))if(v)
 let body; if(method==='POST'){const max=p==='/api/admin'&&['frame','video-part'].includes(url.searchParams.get('action'))?9*1024*1024:['/api/content','/api/video-meta'].includes(p)?220000:p==='/api/admin'?50000:16000;if(Number(req.headers['content-length'])>max){await send(res,json({error:'提交内容过大'},413));req.resume();return;}body=await requestBody(req,max);}
 const request=new Request(origin+p+url.search,{method,headers,body:method==='POST'?body:undefined});
 if(p==='/api/health'){await send(res,json({ok:true}),method==='HEAD');return;}
+if(p==='/connect'&&['GET','HEAD'].includes(method)){await send(res,new Response(connectPage(origin),{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}),method==='HEAD');return;}
 if(p==='/api/gallery'&&method==='GET'){const preview=url.searchParams.get('preview')==='1';if(preview&&!isAdmin(request)){await send(res,json({error:'草稿预览需要管理员登录'},401));return;}const catalog=await gallery();catalog.videos=catalog.videos.map(({captions,...v})=>({...v,url:v.hidden?'':v.url,description:v.hidden?'此影片暂未开放。':v.description,captionsUrl:captions&&!v.hidden?'/api/captions/'+v.slot+'.vtt':''}));await send(res,json({...catalog,document:await publicDocument(preview),icp:config.icp||'',police:config.police||'',policeUrl:config.policeUrl||''}));return;}
 if(p==='/api/operations'&&method==='GET'){if(!isAdmin(request)){await send(res,json({error:'请先登录'},401));return;}let lastBackup=null,freeGB=null;try{lastBackup=JSON.parse(await readFile(path.join(DATA,'backup-status.json'),'utf8')).completedAt}catch{}try{const disk=await statfs(DATA);freeGB=Number((disk.bavail*disk.bsize/1024**3).toFixed(1))}catch{}const databaseMB=Number(((await stat(path.join(DATA,'gallery.sqlite'))).size/1024**2).toFixed(2));await send(res,json({lastBackup,freeGB,databaseMB}));return;}
 if(p==='/api/content'){await send(res,await contentApi(request));return;}
