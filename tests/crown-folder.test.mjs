@@ -33,7 +33,7 @@ test('extracted Windows frames install incrementally, preserving video validatio
     await writeFile(path.join(project, 'data/config.json'), 'saved-password-and-origin');
     await writeFile(path.join(project, 'data/uploaded-video.mp4'), 'existing-user-media');
     const payloadFiles = ['runtime/media-supplement.mjs', 'src/media-supplement.json',
-      'scripts/install-media-supplement.mjs', 'scripts/import-crown-folder.mjs', 'scripts/windows-node.bat',
+      'scripts/install-media-supplement.mjs', 'scripts/import-crown-folder.mjs', 'scripts/windows-node.bat', 'scripts/windows-crown-ui.ps1',
       'Windows_导入凤冠91帧_本次补充.bat', 'docs/WINDOWS_CROWN360_20261021.md',
       'docs/DESKTOP_ADDONS_GUIDE_20261021.html', 'docs/DESKTOP_ADDONS_GUIDE_20261021.txt'];
     const checksums = [];

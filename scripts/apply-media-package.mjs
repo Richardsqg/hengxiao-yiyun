@@ -16,7 +16,7 @@ export async function applyMediaPackage(target, payload) {
   }
   const files = JSON.parse(await readFile(path.join(source, 'package-manifest.json'), 'utf8'));
   for (const entry of files) {
-    if (!/^(scripts\/[a-z-]+\.(mjs|sh|bat)|runtime\/media-supplement\.mjs|src\/media-supplement\.json|docs\/(MEDIA_SUPPLEMENT_20261020\.md|WINDOWS_CROWN360_20261021\.md|DESKTOP_ADDONS_GUIDE_20261021\.(html|txt))|macOS_[^/]+\.command|Windows_[^/]+\.bat|dist\/assets\/crown-01-frame-\d{3}\.webp)$/.test(entry.path)) throw new Error('补充清单含非预期路径，已停止。');
+    if (!/^(scripts\/[a-z-]+\.(mjs|sh|bat|ps1)|runtime\/media-supplement\.mjs|src\/media-supplement\.json|docs\/(MEDIA_SUPPLEMENT_20261020\.md|WINDOWS_CROWN360_20261021\.md|DESKTOP_ADDONS_GUIDE_20261021\.(html|txt))|macOS_[^/]+\.command|Windows_[^/]+\.bat|dist\/assets\/crown-01-frame-\d{3}\.webp)$/.test(entry.path)) throw new Error('补充清单含非预期路径，已停止。');
     const bytes = await readFile(path.join(source, entry.path));
     if (bytes.length !== entry.bytes || createHash('sha256').update(bytes).digest('hex') !== entry.sha256) throw new Error('补充包校验失败：' + entry.path);
   }
