@@ -72,3 +72,23 @@
 .section-crown .crown-room-top{justify-content:flex-end}
 .artifact-label h2{font:500 22px var(--serif);margin:0;color:var(--gold);letter-spacing:3px}
 @media(max-width:760px){.exhibition-header.crown-page-header{display:flex;padding:24px 18px 3px}.crown-page-title{font-size:26px;letter-spacing:2px}.artifact-label h2{font-size:19px;letter-spacing:1px}.section-crown .crown-room{padding-top:0}}
+
+/* Keep all four navigation targets above mobile browser controls. Native
+   Android/WebView zoom buttons cannot be covered with a webpage z-index. */
+@media(max-width:760px){
+ .exhibition-page{
+  --browser-controls-clearance:0px;
+  --mobile-navigation-inset:max(env(safe-area-inset-bottom,0px),var(--browser-controls-clearance));
+  padding-bottom:calc(128px + var(--mobile-navigation-inset));
+ }
+ .mobile-tabs{padding-bottom:calc(9px + var(--mobile-navigation-inset))}
+ .mobile-tabs button{min-width:0;min-height:52px}
+ .spin-drag-tools button{min-height:44px}
+ .sync-notice{bottom:calc(100px + var(--mobile-navigation-inset))}
+ .feedback-form .submit-button{scroll-margin-bottom:calc(128px + var(--mobile-navigation-inset))}
+}
+@media(max-width:760px) and (hover:none) and (pointer:coarse){
+ @supports not (-webkit-touch-callout:none){
+  .exhibition-page{--browser-controls-clearance:64px}
+ }
+}
