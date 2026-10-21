@@ -1,0 +1,77 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>横小艺韵：360与视频修复详细操作</title><style>@page{size:A4;margin:15mm 16mm}body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;font-size:13px;line-height:1.8;color:#173543;max-width:850px;margin:28px auto;padding:0 20px}h1{font-size:27px;line-height:1.5}h2{font-size:19px;margin-top:26px;border-bottom:1px solid #d6e0e5;padding-bottom:6px;break-after:avoid}h3{font-size:15px;break-after:avoid}.meta{color:#637780;font-size:11px}.note{background:#edf4f7;border-left:4px solid #a48a4d;padding:12px 16px}li{margin:6px 0}code,pre{font-family:Consolas,monospace;font-size:12px;background:#f1f4f5;overflow-wrap:anywhere}pre{padding:10px;white-space:pre-wrap}table{border-collapse:collapse;width:100%;margin:15px 0}td,th{border:1px solid #d6e0e5;padding:7px 10px;text-align:left}th{background:#edf4f7}p,li{orphans:2;widows:2}@media print{body{margin:0;padding:0;max-width:none}}</style></head><body>
+<h1>横小艺韵 1.4.2-desktop<br>360与视频修复操作手册</h1>
+<p class="meta">更新：2026-10-21 · 适用原1.4.2-desktop / 1.4.2-desktop 2独立部署包</p>
+<p>本手册中“原项目文件夹”指打开后能看到 <code>package.json</code>、<code>runtime</code>、<code>dist</code> 的那个目录。外层若还有一层 <code>hengxiao-yiyun</code> 文件夹，请继续打开到含这些文件的位置。不要选择ZIP文件本身，不要选择 <code>dist</code> 子目录。</p>
+<div class="note"><b>推荐顺序：</b>关闭旧服务 → 安装360添加包并导入91帧 → 安装对应系统的视频修复包 → 重启并验证。已经完成的步骤可以跳过。新Windows360包可保留已安装的视频修复，无需为了新增360再装一遍视频修复包。</div>
+<h2>一、先关闭正在运行的旧展馆服务</h2>
+<h3>Windows</h3>
+<ol><li>找到启动展馆时打开的黑色“命令提示符”或Windows终端窗口，里面通常显示展馆网址或“服务已启动”。</li><li>点一下窗口，在里面按 <b>Ctrl+C</b>，等服务结束。</li><li>如果出现“终止批处理操作吗(Y/N)”，输入 <b>Y</b> 后按回车，再关闭窗口。</li><li>只关闭浏览器页面不会停止后台服务。若由桌面程序或托盘图标启动，请使用该程序的“退出”操作。</li></ol>
+<p>确认方法：在浏览器重新打开并刷新 <code>http://127.0.0.1:3000/api/health</code>。若提示无法连接，说明默认3000端口的服务已停止；若仍显示 <code>{"ok":true}</code>，说明仍有服务运行。自定义端口以原启动窗口显示的端口为准。</p>
+<p>找不到启动窗口时，先按 <b>Ctrl+Shift+Esc</b> 打开任务管理器，检查属于展馆的程序。如果不能确认，可在命令提示符运行下面的只读命令查看3000端口的进程编号，再在任务管理器“详细信息”按该PID核对命令行，只结束确认属于展馆的进程：</p>
+<pre>netstat -ano | findstr LISTENING | findstr ":3000 "</pre>
+<h3>Mac</h3>
+<ol><li>找到启动展馆的“终端”窗口。</li><li>点终端，按键盘上的 <b>Control+C</b>（不是Command+C）。</li><li>等出现命令提示符后再关闭该窗口。若没有服务窗口，先退出原桌面启动程序。</li></ol>
+<h2>二、Windows添加第一组91帧360</h2>
+<p>准备两个已有下载：本次 <b>Windows_凤冠360添加包_适配1.4.2-desktop_20261021.zip</b>，以及你手上的 <b>凤冠360_网页轻量包_91帧.zip</b>。不需要重新下载整站。</p>
+<ol>
+<li>按上一节关闭旧展馆。</li>
+<li>分别右键两个ZIP，选择“全部解压”。凤冠素材解压后应有 <code>frames</code> 文件夹，里面是 <code>frame_001.webp</code> 至 <code>frame_091.webp</code>。</li>
+<li>打开本次小添加包解压后的目录，双击 <b>安装到原Windows包.bat</b>。</li>
+<li>窗口要求项目目录时，把原 <code>1.4.2-desktop</code> 中含 <code>package.json</code>、<code>runtime</code>、<code>dist</code> 的文件夹，从资源管理器拖入黑色窗口，再按回车。Windows可能自动加引号，保持原样即可。</li>
+<li>窗口要求图片目录时，把素材解压后的 <b>frames文件夹</b> 拖进去，按回车。也可以拖包含frames的上一层目录。此处选择文件夹，不选择ZIP。</li>
+<li>等待看到“第一组91帧凤冠已全部导入并校验”。安装器会自动将图片命名并放到 <code>dist/assets/crown-01-frame-001.webp</code> 至 <code>crown-01-frame-091.webp</code>，并接入第一展位。无需手动逐张改名。</li>
+<li>打开原项目里的 <b>Windows_启动.bat</b>，或你此前能正常启动的原入口。服务窗口保持开启。</li>
+<li>打开 <code>http://127.0.0.1:3000</code>，按 <b>Ctrl+F5</b> 刷新。进入第一展位，角度计数应显示“1 / 91”，拖动图片、点击左右箭头或播放按钮验证旋转。</li>
+</ol>
+<p>中途取消图片目录选择时，不需要重新安装。以后双击原项目新增的 <b>Windows_导入凤冠91帧_本次补充.bat</b>，再拖入frames文件夹即可继续。</p>
+<p>安装后，本手册也位于原项目 <code>docs/DESKTOP_ADDONS_GUIDE_20261021.html</code>，可离线打开。</p>
+<h2>三、Mac添加第一组91帧360</h2>
+<ol>
+<li>按第一节用 <b>Control+C</b> 停止旧服务。</li>
+<li>解压之前提供的 <b>Mac_小补充包_复用已有凤冠ZIP.zip</b>。</li>
+<li>双击 <b>安装到原Mac包.command</b>，在弹出的选择框中选原项目目录，即打开后有package.json、runtime、dist的那个目录。</li>
+<li>继续选择你手上的 <b>凤冠360_网页轻量包_91帧.zip</b>。Mac这个入口直接读取原ZIP，不需要先拆开91张图片。</li>
+<li>等待成功提示。日后在原项目里双击 <b>macOS_本机启动_本次补充.command</b>，打开 <code>http://127.0.0.1:3000</code>。网页按 <b>Command+Shift+R</b> 刷新。</li>
+<li>若要手机扫码，改用 <b>macOS_同WiFi扫码启动_本次补充.command</b>。Mac会打开二维码页面；手机与Mac连接同一个路由器/Wi-Fi，用相机或微信扫描。保持终端窗口开启，Mac不要睡眠。</li>
+</ol>
+<p>macOS弹出接收传入网络连接的提示时，允许Node。局域网使用Mac内网地址和本地素材，下载完成后的本地浏览不需要翻墙。切换Wi-Fi后重启入口并重新扫码；访客Wi-Fi或开启设备隔离的网络可能无法互访。</p>
+<p>Mac若阻止打开.command，可右键该文件→打开；若明确提示“权限不够”，在原项目目录的终端执行 <code>chmod +x macOS_*本次补充.command</code> 后重试。</p>
+<h2>四、Windows安装视频上传/播放修复包</h2>
+<ol>
+<li>关闭正在运行的旧服务。</li>
+<li>右键 <b>Windows_视频上传播放修复补充包_20261020.zip</b>，选择“全部解压”。</li>
+<li>双击其中的 <b>安装视频上传补充.bat</b>。</li>
+<li>把原项目中含package.json、runtime、dist的文件夹拖入窗口，按回车。等待看到“上传与播放器补充已安装”。</li>
+<li>仍使用原 <b>Windows_启动.bat</b> 启动，打开 <code>http://127.0.0.1:3000/admin</code>；也可使用原“Windows_管理员后台.bat”。沿用原管理员密码。</li>
+<li>在后台按 <b>Ctrl+F5</b> 刷新。点击“影片与360°”，在 <b>FILM 01</b> 的上传卡片选择要替换的MP4。</li>
+<li>等编码检查完成，先点击下方本地预览的播放按钮。确认有画面且声音符合原片后，勾选“我已播放预览并确认画面正常，声音正常（原片无声除外）”。</li>
+<li>点击“确认画面正常，上传并替换”，等待100%及发布成功提示。保持网页和服务窗口开启。</li>
+<li>进入公开展馆的“影像展厅”，选择影片1，再播放、拖动进度验证。</li>
+</ol>
+<h2>五、Mac安装视频上传/播放修复包</h2>
+<ol>
+<li>在原终端按 <b>Control+C</b> 停止服务。</li>
+<li>解压 <b>Mac_视频上传播放修复补充包_20261020.zip</b>。</li>
+<li>双击 <b>安装视频上传补充.command</b>，选择原项目中含package.json、runtime、dist的目录。等待安装成功。</li>
+<li>用原启动入口重新运行。已安装360补充时，可继续用本次补充的Mac本机或同WiFi入口。</li>
+<li>在Mac浏览器打开 <code>http://127.0.0.1:3000/admin</code>；若当前以同WiFi入口启动，则使用启动窗口/二维码页面所显示的网址加 <code>/admin</code>。</li>
+<li>按 <b>Command+Shift+R</b> 刷新后台，点击“影片与360°”，在FILM 01选择MP4。播放本地预览、确认画面和声音，勾选确认框，再点击上传替换。</li>
+<li>等100%及发布提示，再到公开“影像展厅”检查影片1。</li>
+</ol>
+<h2>六、151MB有声音没画面时怎么处理</h2>
+<p>当前上传上限是 <b>400 MiB</b>，151MB在范围内，无需为了容量压到30MB。MP4后缀并不能保证里面的视频编码兼容Windows、Mac和手机。</p>
+<p>本次修复会在上传前给出明确检查结果；失败时原影片继续保留。修复包不会自动改变已经上传文件的编码，也不会把原视频猜测成已修复。若被提示HEVC/H.265、高色深、缺视频轨或文件损坏，请从原片另存兼容版本：</p>
+<table><tr><th>项目</th><th>导出选项</th></tr><tr><td>文件容器</td><td>MP4</td></tr><tr><td>视频编码</td><td>H.264 Baseline / Main / High</td></tr><tr><td>像素格式</td><td>8位、4:2:0（yuv420p）</td></tr><tr><td>音频</td><td>AAC-LC；原片静音可不带音轨</td></tr><tr><td>建议画幅</td><td>720p或1080p</td></tr></table>
+<p><b>本机已有FFmpeg时：</b>Mac在原项目双击 <code>macOS_另存兼容视频.command</code> 选择原片；Windows双击 <code>Windows_另存兼容视频.bat</code>，将原视频拖入窗口并回车。会在原片旁另存 <code>原文件名-兼容版.mp4</code>，原片不覆盖。回后台选择这个兼容版，按前面的预览和上传步骤操作。</p>
+<p><b>本机没有FFmpeg时：</b>入口会明确停止，不会自动下载大转码器。可用自己的视频工具按上表导出，再上传。仅把MOV、HEVC文件改成.mp4后缀不会改变编码。</p>
+<h2>七、常见情况与数据保留</h2>
+<ul>
+<li><b>提示端口3000被占用：</b>先停止旧服务，再打开一个启动入口；不要同时开旧、新两个启动窗口。</li>
+<li><b>360装好了却仍显示原序列：</b>先强制刷新并确认第一展位。若后台第一展位以前已上传另一组序列，它会优先保留；登录后台→“影片与360°”→“360°环绕照片”→选择展位1→选择这次91张WebP→上传并启用。无需删除数据库。</li>
+<li><b>提示原包结构不匹配：</b>先检查选的是不是含package.json、runtime、dist的项目目录。目录正确仍失败时，保留报错，不要手动替换整个runtime或dist。</li>
+<li><b>路径有中文或空格：</b>直接从文件管理器把整个目录拖进命令窗口即可，脚本支持带引号的路径。</li>
+<li><b>密码、留言和其他上传素材：</b>安装器不改写data内这些内容。程序运行后，正常提交留言等操作仍由原程序保存。</li>
+<li><b>程序备份：</b>360接口备份在 <code>backups/media-supplement-20261020</code>；视频程序备份在 <code>backups/video-upload-fix-20261020</code>。需要撤回时先停止服务，按原相对目录恢复程序文件；不要删除data。</li>
+</ul>
+<p class="meta">本次已验证云端独立版接口、91帧文件校验、补充安装与视频浏览器流程。用户1.4.2原ZIP及Mac/Windows真机不在云环境，原接口不匹配时会停止。原151MB视频未被读取，不能确认其具体编码。</p>
+</body></html>
