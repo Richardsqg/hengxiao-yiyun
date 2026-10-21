@@ -21,11 +21,21 @@ const origin=localPreview?`http://127.0.0.1:${port}`:new URL(config.origin).orig
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp4':'video/mp4','.ico':'image/x-icon','.json':'application/json; charset=utf-8'};
 const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/#'+selected));return qrCache.get(selected);}
 function security(res){res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');res.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'");}
-async function send(res,response,head=false){res.writeHead(response.status,Object.fromEntries(response.headers));if(head){res.end();return;}if(response.body)await pipeline(Readable.fromWeb(response.body),res);else res.end();}
+async function streamResponse(res,source){
+ let clientDisconnected=res.destroyed;
+ // Observe the response before pipeline's close handler destroys the source.
+ // A source that failed or closed first must still reach the error logger.
+ const onClose=()=>{if(!res.writableFinished&&(!source.destroyed||source.readableEnded))clientDisconnected=true;};
+ res.once('close',onClose);
+ try{await pipeline(source,res);}catch(error){
+  if(!clientDisconnected||!['ERR_STREAM_PREMATURE_CLOSE','ECONNRESET','ECONNABORTED','EPIPE'].includes(error.code))throw error;
+ }finally{res.removeListener('close',onClose);}
+}
+async function send(res,response,head=false){res.writeHead(response.status,Object.fromEntries(response.headers));if(head){res.end();return;}if(response.body)await streamResponse(res,Readable.fromWeb(response.body));else res.end();}
 async function staticFile(req,res,file){let s;try{s=await stat(file)}catch{await send(res,json({error:'文件不存在'},404));return;}if(!s.isFile()){await send(res,json({error:'文件不存在'},404));return;}
 const headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Accept-Ranges':'bytes','Cache-Control':file.endsWith('.html')?'no-store':'public, max-age=3600'};let start=0,end=s.size-1,code=200;const range=req.headers.range;
 if(range){const match=/^bytes=(\d*)-(\d*)$/.exec(range);if(!match||(!match[1]&&!match[2])){res.writeHead(416,{'Content-Range':`bytes */${s.size}`});res.end();return;}if(match[1]){start=Number(match[1]);if(match[2])end=Math.min(Number(match[2]),end);}else start=Math.max(0,s.size-Number(match[2]));if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start>end||start>=s.size){res.writeHead(416,{'Content-Range':`bytes */${s.size}`});res.end();return;}code=206;headers['Content-Range']=`bytes ${start}-${end}/${s.size}`;}
-headers['Content-Length']=String(Math.max(0,end-start+1));res.writeHead(code,headers);if(req.method==='HEAD'||s.size===0){res.end();return;}await pipeline(createReadStream(file,{start,end}),res);}
+headers['Content-Length']=String(Math.max(0,end-start+1));res.writeHead(code,headers);if(req.method==='HEAD'||s.size===0){res.end();return;}await streamResponse(res,createReadStream(file,{start,end}));}
 function cookie(token='',expire=false){return `fenghua_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${expire?0:28800}${origin.startsWith('https:')?'; Secure':''}`;}
 async function requestBody(req,max){const chunks=[];let length=0;for await(const c of req){length+=c.length;if(length>max){const error=new Error('提交文件或内容过大');error.status=413;throw error;}chunks.push(c);}return Buffer.concat(chunks);}
 async function handle(req,res){security(res);let url;try{url=new URL(req.url,origin)}catch{await send(res,json({error:'请求无效'},400));return;}const method=req.method||'GET',p=url.pathname;

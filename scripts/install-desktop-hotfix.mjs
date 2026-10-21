@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-export async function installDesktopHotfix(target, payload) {
+export async function installDesktopHotfix(target, payload, options = {}) {
   const root = path.resolve(target), source = path.resolve(payload);
   const pkg = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
   if (pkg.name !== 'fenghua-mainland' || pkg.version !== '1.4.3') throw new Error('请选择1.4.3完整部署包内含package.json、runtime、dist的项目目录。');
@@ -20,7 +20,7 @@ export async function installDesktopHotfix(target, payload) {
   const manifest = JSON.parse(await readFile(path.join(source, 'desktop-hotfix-manifest.json'), 'utf8'));
   const entries = [];
   for (const entry of manifest) {
-    if (!/^(runtime\/(server|connect-page)\.mjs|scripts\/(start-media-supplement|open-browser|open-desktop-pages)\.mjs|web\/(Home|Dashboard)\.tsx|web\/media-events\.ts|dist\/index\.html|dist\/assets\/index-[\w-]+\.(js|css)|docs\/WINDOWS_PUBLISH_HOTFIX_20261021\.md|Windows_打开入口\.bat)$/.test(entry.path)) throw new Error('修复清单含非预期路径，已停止。');
+    if (!/^(runtime\/(server|connect-page)\.mjs|scripts\/(start-media-supplement|open-browser|open-desktop-pages)\.mjs|web\/(Home|Dashboard|Feedback|ZoomStage)\.tsx|web\/(media-events|uuid)\.ts|web\/revision\.css|dist\/index\.html|dist\/assets\/index-[\w-]+\.(js|css)|docs\/WINDOWS_PUBLISH_HOTFIX_20261021\.md|Windows_打开入口\.bat)$/.test(entry.path)) throw new Error('修复清单含非预期路径，已停止。');
     const bytes = await readFile(path.join(source, entry.path));
     if (bytes.length !== entry.bytes || sha(bytes) !== entry.sha256) throw new Error('修复包校验失败：' + entry.path);
     let existing;
@@ -31,7 +31,9 @@ export async function installDesktopHotfix(target, payload) {
     if (entry.path.endsWith('.mjs') && spawnSync(process.execPath, ['--check', '--input-type=module'], { input: bytes }).status !== 0) throw new Error('程序语法检查失败：' + entry.path);
     entries.push({ ...entry, bytes, existing });
   }
-  const backup = path.join(root, 'backups/windows-publish-hotfix-20261021');
+  const backupFolder = options.backupFolder || 'windows-publish-hotfix-20261021';
+  if (!/^[a-z0-9-]+$/.test(backupFolder)) throw new Error('程序备份目录无效。');
+  const backup = path.join(root, 'backups', backupFolder);
   for (const entry of entries) {
     const destination = path.join(root, entry.path);
     if (entry.existing && sha(entry.existing) === entry.sha256) continue;
@@ -45,9 +47,8 @@ export async function installDesktopHotfix(target, payload) {
     try { await writeFile(temporary, entry.bytes, { flag: 'wx' }); await rename(temporary, destination); }
     catch (error) { await rm(temporary, { force: true }); throw error; }
   }
-  console.log('Windows启动与视频发布修复已安装。data、密码、留言和已上传视频未改写。');
-  console.log('请重新运行Windows_同WiFi扫码启动.bat；浏览器将打开网页形式的二维码入口。');
-  console.log('已有页面按Ctrl+F5刷新一次。若浏览器没有弹出，可双击新增Windows_打开入口.bat，或复制终端里的网址。');
+  console.log(options.successMessage || 'Windows启动与视频发布修复已安装。data、密码、留言和已上传视频未改写。');
+  for (const message of options.instructions || ['请重新运行Windows_同WiFi扫码启动.bat；浏览器将打开网页形式的二维码入口。', '已有页面按Ctrl+F5刷新一次。若浏览器没有弹出，可双击新增Windows_打开入口.bat，或复制终端里的网址。']) console.log(message);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

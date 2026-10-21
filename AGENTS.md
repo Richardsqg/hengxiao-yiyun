@@ -4,6 +4,8 @@
 
 本仓库仅为 `Richardsqg/hengxiao-yiyun` 展馆。每个新任务先在仓库根目录运行 `node .codex/verify-project.mjs`；若包名、Git remote 或目录不匹配，先停止修改并说明。京东助手已独立到 `Richardsqg/jd-helper`，不得在此继续开发、打包或保存它的构件。独立环境准备与后续新项目步骤见 `docs/CODEX_ENVIRONMENT.md`；环境脚本不会自动创建或发布用户账号中的云环境。
 
+2026-10-21跨设备修复记录见 docs/DEVICE_CONTROLS_FEEDBACK_FIX_20261021.md：100%点击平移需自动放大，两个模式按钮持续可用；Android原生浮层只能预留布局避让，不得用禁用用户缩放解决。私网HTTP不能假设crypto.randomUUID存在，留言需安全UUID后备、可见失败反馈及正确幂等。源码与构建一起交付，不碰data。当前67项Node检查及Chromium交互回归通过，未用模拟冒充Mac/Safari/手机真机。小更新标签patch-1.4.3-controls-feedback-20261021只含安装文件，完整源码应检出工作分支或main。
+
 这是已有项目的迁移副本，基线为 1.4.0（2026-10-13），交接整理日期为 2026-10-15。请先读 README.md、docs/PROJECT_CONTEXT.md、docs/ACCEPTANCE.md，再修改代码。
 
 ## 项目定位

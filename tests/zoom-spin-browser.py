@@ -57,6 +57,20 @@ with tempfile.TemporaryDirectory(prefix='zoom-spin-', dir=ROOT / 'work') as temp
             viewer = page.locator('.zoom-viewer').first
             stage = viewer.locator('.zoom-stage')
             expect(viewer.locator('input[aria-label="旋转角度"]')).to_have_attribute('max', '90')
+            pan = viewer.get_by_role('button', name='拖动平移', exact=True)
+            expect(pan).to_be_enabled()
+            assert magnification(viewer) == '100%'
+            pan.click()
+            expect(pan).to_have_attribute('aria-pressed', 'true')
+            assert int(magnification(viewer).rstrip('%')) > 100
+            before = angle(page)
+            drag_mouse(page, stage, 60, 40)
+            moved = stage.locator('img').evaluate('(img)=>{const m=new DOMMatrix(getComputedStyle(img).transform);return {x:m.m41,y:m.m42}}')
+            assert moved['x'] > 0 and moved['y'] > 0 and angle(page) == before
+            transform = stage.locator('img').get_attribute('style')
+            viewer.get_by_role('button', name='拖动旋转', exact=True).click()
+            assert stage.locator('img').get_attribute('style') == transform
+            viewer.get_by_role('button', name='重置视角', exact=True).click()
             for _ in range(4):
                 viewer.get_by_role('button', name='放大', exact=True).click()
             assert magnification(viewer) == '200%'
@@ -89,6 +103,10 @@ with tempfile.TemporaryDirectory(prefix='zoom-spin-', dir=ROOT / 'work') as temp
             viewer.get_by_role('button', name='暂停旋转', exact=True).click()
             viewer.get_by_role('button', name='全屏查看', exact=True).click()
             full = page.get_by_role('dialog').locator('.zoom-viewer')
+            full.get_by_role('button', name='拖动平移', exact=True).click()
+            expect(full.get_by_role('button', name='拖动平移', exact=True)).to_have_attribute('aria-pressed', 'true')
+            assert int(magnification(full).rstrip('%')) > 100
+            full.get_by_role('button', name='重置视角', exact=True).click()
             full.get_by_role('button', name='放大', exact=True).click()
             full.get_by_role('button', name='下一角度', exact=True).click()
             assert magnification(full) == '125%'
@@ -97,8 +115,28 @@ with tempfile.TemporaryDirectory(prefix='zoom-spin-', dir=ROOT / 'work') as temp
             page.get_by_role('dialog').get_by_role('button', name='关闭', exact=True).click()
             viewer.get_by_role('button', name='重置视角', exact=True).click()
             assert magnification(viewer) == '100%'
-            expect(viewer.get_by_role('button', name='拖动平移', exact=True)).to_be_disabled()
+            expect(viewer.get_by_role('button', name='拖动平移', exact=True)).to_be_enabled()
             desktop.close()
+
+            slow = browser.new_context(viewport={'width': 1280, 'height': 1000})
+            page = slow.new_page()
+            held = []
+            first_frame = '**/assets/crown-01-frame-001.webp'
+            page.route(first_frame, lambda route: held.append(route))
+            page.on('pageerror', lambda error: errors.append(str(error)))
+            page.goto(origin, wait_until='domcontentloaded')
+            viewer = page.locator('.zoom-viewer').first
+            expect(viewer.get_by_role('button', name='拖动平移', exact=True)).to_be_enabled()
+            assert viewer.locator('.zoom-stage img').evaluate('(img)=>img.naturalWidth') == 0
+            viewer.get_by_role('button', name='拖动平移', exact=True).click()
+            # Unmeasured placeholder bounds must not enlarge the picture straight to 600%.
+            assert magnification(viewer) == '150%'
+            while held:
+                held.pop().continue_()
+            page.unroute(first_frame)
+            expect(viewer.locator('.zoom-stage img')).to_have_js_property('naturalWidth', 1600)
+            assert magnification(viewer) == '150%'
+            slow.close()
 
             mobile = browser.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, device_scale_factor=1)
             page = mobile.new_page()
@@ -106,6 +144,14 @@ with tempfile.TemporaryDirectory(prefix='zoom-spin-', dir=ROOT / 'work') as temp
             page.goto(origin, wait_until='networkidle')
             viewer = page.locator('.zoom-viewer').first
             stage = viewer.locator('.zoom-stage')
+            expect(viewer.get_by_role('button', name='拖动平移', exact=True)).to_be_enabled()
+            viewer.get_by_role('button', name='拖动平移', exact=True).tap()
+            expect(viewer.get_by_role('button', name='拖动平移', exact=True)).to_have_attribute('aria-pressed', 'true')
+            assert int(magnification(viewer).rstrip('%')) > 100
+            before = angle(page)
+            transform = stage.locator('img').get_attribute('style')
+            # Touch PointerEvents exercise the shared path used by current iOS and Android browsers.
+            stage.scroll_into_view_if_needed()
             box = stage.bounding_box()
             x, y = box['x'] + box['width'] / 2, box['y'] + box['height'] / 2
             cdp = mobile.new_cdp_session(page)
@@ -114,6 +160,14 @@ with tempfile.TemporaryDirectory(prefix='zoom-spin-', dir=ROOT / 'work') as temp
                 cdp.send('Input.dispatchTouchEvent', {'type': kind, 'touchPoints': [{'id': i, 'x': px, 'y': py} for i, px, py in points]})
                 page.wait_for_timeout(40)
 
+            touch('touchStart', [(0, x, y)])
+            touch('touchMove', [(0, x + 40, y + 20)])
+            touch('touchEnd', [])
+            assert angle(page) == before and stage.locator('img').get_attribute('style') != transform
+            viewer.get_by_role('button', name='重置视角', exact=True).tap()
+            stage.scroll_into_view_if_needed()
+            box = stage.bounding_box()
+            x, y = box['x'] + box['width'] / 2, box['y'] + box['height'] / 2
             touch('touchStart', [(0, x - 35, y), (1, x + 35, y)])
             touch('touchMove', [(0, x - 70, y), (1, x + 70, y)])
             assert magnification(viewer) == '200%'
@@ -144,7 +198,7 @@ with tempfile.TemporaryDirectory(prefix='zoom-spin-', dir=ROOT / 'work') as temp
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert not errors, errors
             browser.close()
-        print('PASS: desktop drag/arrows/slider/autoplay/fullscreen retain zoom; mobile pinch + enlarged rotation + pan + pinch-release protection; 91 frames and no browser errors.')
+        print('PASS: 100% pan buttons activate and auto-enlarge on desktop/mobile/fullscreen; slow first-image loading does not jump to 600%; desktop drag/arrows/slider/autoplay retain zoom; mobile pinch + rotation + pan + pinch-release protection; 91 frames and no browser errors. Chromium emulation only; Mac/Safari/iPhone/WeChat hardware not verified.')
     finally:
         child.terminate()
         try:

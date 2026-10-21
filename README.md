@@ -1,5 +1,9 @@
 # 横小艺韵 · Codex 完整项目交接包
 
+2026-10-21 跨设备交互与留言修复：100%可点“拖动平移”并自动放大，手机底部导航避让原生缩放条，私网HTTP留言可提交到后台。Windows/Mac共用小更新、手机只需重新扫码；[原因、下载与操作](docs/DEVICE_CONTROLS_FEEDBACK_FIX_20261021.md)。
+
+2026-10-21 CMD日志小修复：正常切换或拖动视频造成的传输取消不再误报 `Request failed: ERR_STREAM_PREMATURE_CLOSE`，真实读取错误继续记录。只更新一个后台文件，不改data或素材；[原因、下载和安装步骤](docs/CMD_STREAM_LOG_FIX_20261021.md)。
+
 1.4.3-desktop 完整部署包已整合91帧凤冠、放大后继续360旋转、视频上传编码检查与预览确认，以及Mac/Windows本机和同Wi-Fi扫码入口。下载的完整ZIP内置官方Node.js 24.22.0，无需另外安装Node或补丁；请先打开包内“开始使用.html”。[完整部署说明](docs/DESKTOP_1_4_3.html)。GitHub源码不重复提交运行环境二进制；维护者可用 `python scripts/package-desktop.py` 生成含运行环境的两个ZIP。
 
 受Drive连接工具单文件100MiB上限影响，下载版按系统分成两个文件；解压第1包后双击生成工具，选择第2段，即可自动校验并解压完整程序，无需Node。[两段下载操作](docs/DESKTOP_DOWNLOAD.md)。
