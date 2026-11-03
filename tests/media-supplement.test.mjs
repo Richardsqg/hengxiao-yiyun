@@ -27,6 +27,12 @@ test('new media defaults preserve uploaded first crown and all other exhibits', 
   assert.equal(supplementGallery({ videos, crownFrames: { '1': uploaded }, frames: uploaded }).frames, uploaded);
 });
 
+test('bundled first film never replaces a hidden or uploaded first video',()=>{
+ for(const video of [{slot:1,url:'/api/media/videos/teacher-upload.mp4'},{slot:1,url:'/assets/film-01.mp4',hidden:true}]){
+  const result=supplementGallery({videos:[video],crownFrames:{},frames:[]});assert.equal(result.videos[0],video);
+ }
+});
+
 test('LAN discovery chooses physical private addresses and excludes VPN interfaces', () => {
   const address = (value, internal = false) => [{ address: value, family: 'IPv4', internal }];
   assert.deepEqual(lanAddresses({ utun0: address('10.9.0.1'), en1: address('172.20.1.3'), en0: address('192.168.1.20'), lo0: address('127.0.0.1', true), public: address('8.8.8.8') }), [
@@ -60,7 +66,7 @@ test('incremental installer and local/LAN browsing, first-video import and confi
     await writeFile(path.join(folder, 'runtime/storage.mjs'), originalStorage);
     await mkdir(path.join(folder, 'dist/assets'), { recursive: true });
     for (const entry of await readdir(path.join(root, 'dist/assets'))) {
-      if (entry !== 'film-01-qiasi.mp4') await symlink(path.join(root, 'dist/assets', entry), path.join(folder, 'dist/assets', entry));
+      if (!['film-01-qiasi.mp4','film-01-qiasi-20261019-v2.mp4'].includes(entry)) await symlink(path.join(root, 'dist/assets', entry), path.join(folder, 'dist/assets', entry));
     }
     await symlink(path.join(root, 'dist/index.html'), path.join(folder, 'dist/index.html'));
     await symlink(path.join(root, 'media-parts'), path.join(folder, 'media-parts'), 'dir');

@@ -1,0 +1,32 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>横小艺韵1.4.4 · 完整部署与校园网检查</title><style>body{max-width:920px;margin:35px auto;padding:0 22px 60px;font:17px/1.9 system-ui,"Microsoft YaHei",sans-serif;color:#183b49;background:#f5f2eb}h1,h2{color:#956a27}h1{font-size:29px}h2{margin-top:38px;font-size:23px}code{background:#fff;padding:2px 6px;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%;font-size:15px}td,th{border:1px solid #bdc8c7;padding:10px;text-align:left}a{color:#176181}.note{background:#fff4cf;padding:16px;border-left:4px solid #b98a37}li{margin:8px 0}</style></head><body>
+<h1>横小艺韵1.4.4：先打开这一页</h1>
+<p>这是在已有项目上整理的<strong>完整Windows/Mac部署包</strong>，已整合此前平移、手机导航、留言和视频发布修复，无需再装旧补丁。学校logo、默认“凤冠360展示”、课程、图片、三部影片、91帧凤冠、登录后台、问卷及Excel继续保留。</p>
+<p class="note">这是电脑本机/校园局域网程序。电脑需开机，手机所在网络需允许访问这台电脑。此包不是公网正式网站，也不能绕过学校不同楼层的网络隔离。</p>
+<h2>一、完整下载、合并</h2>
+<ol><li>选择对应系统的两个下载文件：<strong>第1包.zip＋第2段.zip.part2</strong>。两个都下载完整，不要混用Windows和Mac文件。</li><li>全部解压第1包到一个新的本机文件夹。第2段保持原样，不用打开或解压。</li><li>Windows双击“Windows_生成并解压完整包.bat”；Mac双击“Mac_生成并解压完整包.command”。在弹窗里选择本系统的第2段。</li><li>工具将校验SHA-256、合并并解压。得到 <code>完整部署包/hengxiao-yiyun-1.4.4-desktop</code>。后续启动要进入这个项目文件夹；不要在下载段或ZIP内部运行。</li></ol>
+<p>如已存在同名的未完成目录，合并器会停止，避免覆盖。保留它，换一个新文件夹重新解压第1包即可。Windows建议选择较短的本地路径。不要直接在网盘同步目录或跨网共享目录运行。</p>
+<h2>二、先决定是否保留旧内容</h2>
+<p><strong>首次试用</strong>可直接下一节。如果旧电脑已有密码、留言或后来上传的视频，先按下面做：</p>
+<ol><li>先停止旧服务：在原黑色窗口按Ctrl+C；Windows询问终止批处理时输入Y。</li><li>保留原项目整份不动，并把原活动数据目录另存一份。原启动窗口的“当前数据目录”可以帮助确认。</li><li>在<strong>新程序第一次启动之前</strong>，将旧活动数据目录完整复制为新项目的 <code>data</code> 文件夹。必须含config.json、gallery.sqlite及media等原有内容，不只复制数据库文件。</li><li>1.4.3通常就是旧项目的data。若旧版本实际用的是data/portable或data/local-preview，应将<strong>该活动目录的内容</strong>复制到新项目data，不能把空的父目录当成原数据。</li><li>如果新项目已试运行产生data，先停止新服务并将新data改名保留，再复制旧data，不直接合并或覆盖。</li></ol>
+<p>若你以前用“导入第一部视频”工具手工放置了 <code>旧项目/dist/assets/film-01-qiasi.mp4</code>，且想继续使用这份影片，也将它复制到新项目同一路径。后台上传的影片则随整个data/media一起保留。</p>
+<p>本包默认第一片包含此前提供的约113秒、60fps掐丝珐琅视频。<strong>后来只上传到你电脑后台的影片和留言，我无法从聊天取得，需通过旧data保留。</strong> 不要把data或备份上传GitHub。不要在两台电脑上同时通过网盘共享一个SQLite目录。</p>
+<h2>三、Windows打开</h2>
+<ol><li>进入完整项目，双击 <strong>Windows_同WiFi扫码启动.bat</strong>。只在电脑看时用 <strong>Windows_启动.bat</strong>。</li><li>首次由你设置管理员密码，至少12个字符，输入时不显示。已有旧data配置则继续使用原密码。</li><li>多网卡时按提示选择手机所在校园网能访问的地址；使用网线时确认选的是对应地址。</li><li>等到显示服务已启动，浏览器将打开二维码与入口页。保持窗口开启；允许Node在需要的校园网络配置中接收连接，不需要关闭整个防火墙。</li></ol>
+<h2>四、Mac打开（Intel及Apple芯片）</h2>
+<ol><li>需要 <strong>macOS13.5或更新</strong>。双击 <strong>macOS_同WiFi扫码启动.command</strong>；只在电脑看时用 <strong>macOS_启动.command</strong>。</li><li>按提示设置密码或沿用旧data；多个地址时选择正确校园网地址。</li><li>若.command无执行权限，打开“终端”，输入 <code>bash</code> 和一个空格，把启动文件拖入终端，再按回车。</li><li>如果系统提示下载安全确认，先核对来自自己的项目，按针对该文件的系统提示处理。不要关闭系统整体安全保护。</li><li>服务运行时会尝试防止Mac闲置休眠；仍请<strong>接电、开盖</strong>，不要手动睡眠。合盖、关机或网络断开仍会停止访问。</li></ol>
+<p>完整包已经附带官方Node24.22.0及许可证，自动选择相应CPU。正常运行无需安装Node、npm、数据库服务器、Homebrew、Xcode或浏览器插件。另存视频的转码工具才需选装FFmpeg，不是普通查看的必需品。</p>
+<h2>五、手机、后台与备份</h2>
+<p>扫码进入启动窗口显示的实际网址。首页仍为“凤冠360展示”，公众端保持四入口。后台由入口页的“管理员后台”打开，或在<strong>同一个展馆网址</strong>后加 <code>/admin</code>。登录后修改图文、上传图片/视频/实拍360组，查看留言和导出Excel。</p>
+<p>暂停上传后，Windows运行 <strong>Windows_备份数据.bat</strong>；Mac运行 <strong>macOS_备份数据.command</strong>。备份在本项目 <code>backups</code>，请复制到另一台设备保存。Excel只用于阅读统计，不能替代完整备份。</p>
+<p>电脑和手机退出旧页面后重新打开/扫码，确保加载新版。电脑可强制刷新：Windows为Ctrl+F5，Mac为Command+Shift+R。电脑换网络、IP变化后重新启动并更换二维码。系统检测到原IP消失时会在终端提醒。</p>
+<h2>六、本版实际修了什么</h2>
+<ul><li>凤冠由进首页即预取91帧，改为当前帧优先、相邻一帧按需预取。保留1600×1600原图，不降低原图质量。当前帧未到时保留上一张画面，不闪成空白；错误可单独重试。</li><li>文化寻根图片载入失败会显示“点击重试”。影片打开前不抢先读取视频，播放缓冲和失败均有提示，可以重新载入并检查连接。</li><li>静态媒体增加ETag及修改时间校验，支持304复用；视频保留Range/206。HTML仍不缓存，避免一直停在旧页面。</li><li>继承100%可点平移、放大仍能旋转、手机四导航避让及私网HTTP问卷提交修复。完整91帧仍在包内，自动旋转时按网络可用速度逐步加载。</li></ul>
+<h2>七、不同楼层仍打不开时，先检查这一页</h2>
+<p>在出问题的手机上打开启动窗口的 <code>http://实际IP:端口/connect</code>，点击<strong>开始连接自检</strong>。它会检查服务、展馆资料、图片读取及视频分段，不会提交测试问卷。</p>
+<table><tr><th>结果</th><th>下一步</th></tr><tr><td>页面/健康检查都打不开</td><td>确认电脑和窗口仍在运行、IP正确；请学校网管检查该楼层网段、访客/AP隔离和电脑入站权限。同WiFi名称不保证互通。</td></tr><tr><td>资料正常，图片/视频404</td><td>检查完整包及旧data/media是否复制完整，保留报错，不删除数据库。</td></tr><tr><td>视频不是206或返回HTML</td><td>可能有网络网关/代理改写，交给网管核对请求路径与分段响应。</td></tr><tr><td>全部正常但多人播放慢</td><td>电脑优先接网线，检查AP负载、视频实际码率和无线覆盖。十路约2Mbps视频需要约20Mbps有效吞吐，不能只看“已连接WiFi”。</td></tr></table>
+<p>请保留<strong>重启之前</strong>的自检结果、终端报错和时间。先1台、再5台、再10台从不同楼层实际扫码；每台检查图片、三部影片，并提交一份问卷后核对后台。</p>
+<h2>八、验证边界与缺少资料</h2>
+<p>本轮已在Linux中验证构建、70项Node测试、Chromium桌面/触屏交互，以及10个独立冷缓存客户端在模拟2Mbps/120ms条件下加载和提交。10份问卷真实落库并能在后台查看、导出；故意断开图片/视频后的重试通过。</p>
+<p>首屏凤冠序列由91帧约32MiB降为2帧约0.80MiB，指的是<strong>这组序列的初始加载</strong>，不等于所有视频总流量减少，也不是对校园WiFi速度的保证。原图和三部影片未重新压缩。</p>
+<p>没有在你的Mac/Windows、iPhone、三星微信和校园网真机操作；程序不能替学校解除跨网段隔离。第一展位有91帧实拍，其余展位仍按已有真实资料显示；未虚构八件完整360作品。更多维护边界见docs中的原项目说明。</p>
+</body></html>

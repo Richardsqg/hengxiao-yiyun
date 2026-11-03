@@ -13,11 +13,13 @@ import { POST as feedbackPost } from './feedback.mjs';
 import { contentApi,publicDocument,videoMeta } from './content.mjs';
 import { createQrArtifacts } from './qr.mjs';
 import { connectPage } from './connect-page.mjs';
+import { networkCheckScript } from './network-check.mjs';
 
 const localPreview=process.env.LOCAL_PREVIEW==='1';
 const port=Number(process.env.PORT||3000);
 const host=localPreview?'127.0.0.1':process.env.HOST||'127.0.0.1';
 const origin=localPreview?`http://127.0.0.1:${port}`:new URL(config.origin).origin;
+const connectionHtml=connectPage(origin);
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp4':'video/mp4','.ico':'image/x-icon','.json':'application/json; charset=utf-8'};
 const qrCache=new Map([['',createQrArtifacts(origin)]]);function qrFor(section){const selected=['crown','culture','films','voices'].includes(section)?section:'';if(!qrCache.has(selected))qrCache.set(selected,createQrArtifacts(origin+'/#'+selected));return qrCache.get(selected);}
 function security(res){res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');res.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'");}
@@ -32,8 +34,18 @@ async function streamResponse(res,source){
  }finally{res.removeListener('close',onClose);}
 }
 async function send(res,response,head=false){res.writeHead(response.status,Object.fromEntries(response.headers));if(head){res.end();return;}if(response.body)await streamResponse(res,Readable.fromWeb(response.body));else res.end();}
-async function staticFile(req,res,file){let s;try{s=await stat(file)}catch{await send(res,json({error:'文件不存在'},404));return;}if(!s.isFile()){await send(res,json({error:'文件不存在'},404));return;}
-const headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Accept-Ranges':'bytes','Cache-Control':file.endsWith('.html')?'no-store':'public, max-age=3600'};let start=0,end=s.size-1,code=200;const range=req.headers.range;
+async function staticFile(req,res,file){let s;try{s=await stat(file)}catch(error){if(!['ENOENT','ENOTDIR'].includes(error.code))throw error;await send(res,json({error:'文件不存在'},404));return;}if(!s.isFile()){await send(res,json({error:'文件不存在'},404));return;}
+const headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Accept-Ranges':'bytes','Cache-Control':file.endsWith('.html')?'no-store':'public, max-age=3600'};let start=0,end=s.size-1,code=200;let range=req.headers.range;
+if(!file.endsWith('.html')){
+ const etag='"'+s.size.toString(16)+'-'+Math.trunc(s.mtimeMs).toString(16)+'"',modified=Math.floor(s.mtimeMs/1000)*1000;
+ headers.ETag=etag;headers['Last-Modified']=new Date(modified).toUTCString();
+ const incoming=req.headers['if-none-match'],since=req.headers['if-modified-since'];
+ const unchanged=incoming?incoming.split(',').some(value=>value.trim()==='*'||value.trim().replace(/^W\//,'')===etag):since&&Number.isFinite(Date.parse(since))&&modified<=Date.parse(since);
+ if(unchanged){res.writeHead(304,headers);res.end();return;}
+ const ifRange=req.headers['if-range'];
+ if(range&&ifRange&&ifRange!==etag&&!(Number.isFinite(Date.parse(ifRange))&&modified<=Date.parse(ifRange)))range=undefined;
+}
+
 if(range){const match=/^bytes=(\d*)-(\d*)$/.exec(range);if(!match||(!match[1]&&!match[2])){res.writeHead(416,{'Content-Range':`bytes */${s.size}`});res.end();return;}if(match[1]){start=Number(match[1]);if(match[2])end=Math.min(Number(match[2]),end);}else start=Math.max(0,s.size-Number(match[2]));if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start>end||start>=s.size){res.writeHead(416,{'Content-Range':`bytes */${s.size}`});res.end();return;}code=206;headers['Content-Range']=`bytes ${start}-${end}/${s.size}`;}
 headers['Content-Length']=String(Math.max(0,end-start+1));res.writeHead(code,headers);if(req.method==='HEAD'||s.size===0){res.end();return;}await streamResponse(res,createReadStream(file,{start,end}));}
 function cookie(token='',expire=false){return `fenghua_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${expire?0:28800}${origin.startsWith('https:')?'; Secure':''}`;}
@@ -46,7 +58,8 @@ const headers=new Headers();for(const [k,v] of Object.entries(req.headers))if(v)
 let body; if(method==='POST'){const max=p==='/api/admin'&&['frame','video-part'].includes(url.searchParams.get('action'))?9*1024*1024:['/api/content','/api/video-meta'].includes(p)?220000:p==='/api/admin'?50000:16000;if(Number(req.headers['content-length'])>max){await send(res,json({error:'提交内容过大'},413));req.resume();return;}body=await requestBody(req,max);}
 const request=new Request(origin+p+url.search,{method,headers,body:method==='POST'?body:undefined});
 if(p==='/api/health'){await send(res,json({ok:true}),method==='HEAD');return;}
-if(p==='/connect'&&['GET','HEAD'].includes(method)){await send(res,new Response(connectPage(origin),{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}),method==='HEAD');return;}
+if(p==='/network-check.js'&&['GET','HEAD'].includes(method)){await send(res,new Response(networkCheckScript,{headers:{'Content-Type':'text/javascript; charset=utf-8','Cache-Control':'no-store'}}),method==='HEAD');return;}
+if(p==='/connect'&&['GET','HEAD'].includes(method)){await send(res,new Response(connectionHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}),method==='HEAD');return;}
 if(p==='/api/gallery'&&method==='GET'){const preview=url.searchParams.get('preview')==='1';if(preview&&!isAdmin(request)){await send(res,json({error:'草稿预览需要管理员登录'},401));return;}const catalog=await gallery();catalog.videos=catalog.videos.map(({captions,...v})=>({...v,url:v.hidden?'':v.url,description:v.hidden?'此影片暂未开放。':v.description,captionsUrl:captions&&!v.hidden?'/api/captions/'+v.slot+'.vtt':''}));await send(res,json({...catalog,document:await publicDocument(preview),icp:config.icp||'',police:config.police||'',policeUrl:config.policeUrl||''}));return;}
 if(p==='/api/operations'&&method==='GET'){if(!isAdmin(request)){await send(res,json({error:'请先登录'},401));return;}let lastBackup=null,freeGB=null;try{lastBackup=JSON.parse(await readFile(path.join(DATA,'backup-status.json'),'utf8')).completedAt}catch{}try{const disk=await statfs(DATA);freeGB=Number((disk.bavail*disk.bsize/1024**3).toFixed(1))}catch{}const databaseMB=Number(((await stat(path.join(DATA,'gallery.sqlite'))).size/1024**2).toFixed(2));await send(res,json({lastBackup,freeGB,databaseMB}));return;}
 if(p==='/api/content'){await send(res,await contentApi(request));return;}
@@ -72,7 +85,7 @@ if(['/','/admin','/admin/','/guide','/guide/','/preview','/poster'].includes(p))
 let decoded;try{decoded=decodeURIComponent(p)}catch{await send(res,json({error:'请求无效'},400));return;}if(decoded.includes('..')||decoded.includes('\\')||decoded.split('/').some(s=>s.startsWith('.'))){await send(res,json({error:'文件不存在'},404));return;}
 await staticFile(req,res,path.join(ROOT,'dist',decoded));
 }
-export const server=http.createServer((req,res)=>handle(req,res).catch(error=>{if(!res.headersSent){security(res);res.writeHead(error.status||500,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify({error:error.status===413?'提交内容过大':'服务暂时不可用，请稍后重试'}));}else res.destroy();console.error('Request failed:',error.code||error.name);}));
+export const server=http.createServer((req,res)=>handle(req,res).catch(error=>{if(!res.headersSent){security(res);res.writeHead(error.status||500,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify({error:error.status===413?'提交内容过大':'服务暂时不可用，请稍后重试'}));}else res.destroy();console.error('Request failed:',error.code||error.name,req.method,new URL(req.url,origin).pathname);}));
 server.requestTimeout=120000;server.headersTimeout=30000;
 server.on('error',error=>{console.error(error.code==='EADDRINUSE'?`端口 ${port} 已被占用，请关闭之前的启动窗口后重试。`:`服务启动失败：${error.message}`);process.exit(1);});
 server.listen(port,host,()=>{

@@ -56,7 +56,7 @@ with tempfile.TemporaryDirectory(prefix='published-video-', dir=ROOT / 'work') a
             public.on('pageerror', lambda error: errors.append(str(error)))
             public.goto(origin, wait_until='networkidle')
             public.locator('.desktop-tabs').get_by_role('button', name='影像展厅').click()
-            expect(public.locator('.film-stage video')).to_have_attribute('src', '/assets/film-01.mp4')
+            expect(public.locator('.film-stage video')).to_have_attribute('src', '/assets/film-01-qiasi-20261019-v2.mp4')
             admin = context.new_page()
             admin.on('pageerror', lambda error: errors.append(str(error)))
             admin.goto(origin + '/admin')

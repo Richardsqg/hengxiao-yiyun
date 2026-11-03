@@ -92,3 +92,10 @@
   .exhibition-page{--browser-controls-clearance:64px}
  }
 }
+
+/* 1.4.4: keep the last image visible while the next frame arrives. */
+.frame-status{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);padding:6px 10px;background:#102632dd;color:#edd9ad;font-size:12px;pointer-events:none}
+.media-recovery{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+.media-recovery button,.media-recovery a{border:1px solid currentColor;border-radius:4px;padding:8px 14px;min-height:44px;font-size:13px}
+.rail-retry{position:absolute;inset:auto 0 0;padding:8px;background:#102632e6;color:#edd9ad;font-size:11px;text-align:center}
+.video-recovery{position:absolute;z-index:2;left:12px;right:12px;top:12px;padding:12px;background:#fff6ee;color:#753820;font-size:12px;line-height:1.8}

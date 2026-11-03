@@ -70,6 +70,7 @@ def main():
     cache = ROOT / 'work/desktop-node-cache'
     cache.mkdir(parents=True, exist_ok=True)
     version = json.loads((ROOT / 'package.json').read_text())['version']
+    source_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT).decode().strip()
     sources = subprocess.check_output(['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], cwd=ROOT).decode().split('\0')
     omit_prefixes = ('.git/',)
     omit_files = {'CODEX_FIRST_MESSAGE.txt', 'macOS_同WiFi扫码启动_本次补充.command', 'macOS_本机启动_本次补充.command',
@@ -113,8 +114,9 @@ def main():
                 z.write(file, prefix + name)
                 checksums.append({'path': name, 'bytes': file.stat().st_size, 'sha256': sha256(file)})
             z.writestr(prefix + '.runtime/runtime-manifest.json', json.dumps(runtime_manifest, ensure_ascii=False, indent=2) + '\n')
-            z.writestr(prefix + '开始使用.html', (ROOT / 'docs/DESKTOP_1_4_3.html').read_bytes())
-            z.writestr(prefix + 'desktop-manifest.json', json.dumps({'version': version, 'platform': platform, 'files': checksums}, ensure_ascii=False, indent=2) + '\n')
+            guide = ROOT / 'docs' / ('DESKTOP_' + version.replace('.', '_') + '.html')
+            z.writestr(prefix + '开始使用.html', guide.read_bytes())
+            z.writestr(prefix + 'desktop-manifest.json', json.dumps({'version': version, 'platform': platform, 'sourceCommit': source_commit, 'files': checksums}, ensure_ascii=False, indent=2) + '\n')
         with zipfile.ZipFile(archive) as z:
             bad = z.testzip()
             if bad:

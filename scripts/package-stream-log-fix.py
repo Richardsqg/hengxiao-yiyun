@@ -8,6 +8,8 @@ import sys
 import zipfile
 
 root = Path(__file__).resolve().parent.parent
+if json.loads((root / 'package.json').read_text())['version'] != '1.4.3':
+    raise RuntimeError('此工具仅用于历史1.4.3补丁；当前完整版本请使用package-desktop.py，不要生成旧补丁。')
 out = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root / 'work/stream-log-fix-package'
 files = out / 'files'
 files.mkdir(parents=True, exist_ok=True)

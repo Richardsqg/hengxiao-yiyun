@@ -13,8 +13,8 @@ const frames = manifest.frames.map((entry, index) => {
 });
 if (frames.length !== 91) throw new Error('本次凤冠素材应为完整91帧。');
 
-export function firstVideoReady() {
-  const file = path.join(root, 'dist', manifest.video.path);
+export function firstVideoReady(relative = manifest.video.path) {
+  const file = path.join(root, 'dist', relative);
   let handle;
   try {
     if (!statSync(file).isFile() || statSync(file).size < 32) return false;
@@ -28,17 +28,20 @@ export function firstVideoReady() {
 
 // Defaults stay outside SQLite. Later uploads and the other seven exhibits retain priority.
 export function supplementGallery(catalog) {
+  const bundled = '/assets/film-01-qiasi-20261019-v2.mp4';
+  const preferred = firstVideoReady() ? manifest.video.path : firstVideoReady(bundled) ? bundled : null;
   const crownFrames = { ...catalog.crownFrames };
   if (!Array.isArray(crownFrames['1']) || !crownFrames['1'].length) {
     crownFrames['1'] = catalog.frames?.length ? catalog.frames : [...frames];
   }
   const videos = catalog.videos.map(video => {
-    if (video.slot !== 1 || video.hidden || !firstVideoReady()) return video;
-    if (!['/assets/film-01.mp4', manifest.video.path].includes(video.url)) return video;
+    if (video.slot !== 1 || video.hidden || !preferred) return video;
+    if (!['/assets/film-01.mp4', manifest.video.path, bundled].includes(video.url)) return video;
     return {
-      ...video, url: manifest.video.path, title: manifest.video.title,
+      ...video, url: preferred, title: manifest.video.title,
+      ...(preferred === bundled && video.poster === '/assets/film-01.jpg' ? {poster:'/assets/film-01-qiasi-20261019-v2.jpg'} : {}),
       description: manifest.video.description,
-      ...(video.url === manifest.video.path ? {} : { captions: '', captionsUrl: '' }),
+      ...(video.url === preferred ? {} : { captions: '', captionsUrl: '' }),
     };
   });
   return { ...catalog, videos, crownFrames, frames: crownFrames['1'] };
