@@ -1,0 +1,104 @@
+{
+  "nodeTests": {
+    "passed": 70,
+    "failed": 0
+  },
+  "weakNetwork": {
+    "clients": [
+      {
+        "client": 1,
+        "initialFrames": 2,
+        "feedbackId": "d452a7df-52bf-481e-a8d2-b30df27dc287"
+      },
+      {
+        "client": 2,
+        "initialFrames": 2,
+        "feedbackId": "5756c5a8-d228-4c0e-a06a-a9be2bf19d67"
+      },
+      {
+        "client": 3,
+        "initialFrames": 2,
+        "feedbackId": "0163504e-dfe1-4ccf-80c6-92be903d912d"
+      },
+      {
+        "client": 4,
+        "initialFrames": 2,
+        "feedbackId": "51963eca-562c-418b-9faf-f3e35821a8ae"
+      },
+      {
+        "client": 5,
+        "initialFrames": 2,
+        "feedbackId": "3dcac91d-c2f9-46da-9250-a0f4cf15a9a5"
+      },
+      {
+        "client": 6,
+        "initialFrames": 2,
+        "feedbackId": "7f77c3d1-5fcf-4fb6-aa57-74e9fb497a98"
+      },
+      {
+        "client": 7,
+        "initialFrames": 2,
+        "feedbackId": "aaa41626-dc09-41cf-87a7-dd7986ccd859"
+      },
+      {
+        "client": 8,
+        "initialFrames": 2,
+        "feedbackId": "df999273-0db4-497c-b19e-b244c2f93df5"
+      },
+      {
+        "client": 9,
+        "initialFrames": 2,
+        "feedbackId": "ce43ce58-2890-413d-aac4-d6614cd5ba1f"
+      },
+      {
+        "client": 10,
+        "initialFrames": 2,
+        "feedbackId": "d620776b-3828-4f3e-bcfd-76f66143c35e"
+      }
+    ],
+    "pageErrors": [],
+    "note": "Chromium emulation on Linux; not campus/phone hardware acceptance"
+  },
+  "completePackages": [
+    {
+      "platform": "Windows",
+      "sourceCommit": "a8fbf10fdb1de3e5931811756a474d62b510e4b8",
+      "filesHashed": 323,
+      "runtimeVariants": 2,
+      "startup": "Linux Node only; native OS not tested",
+      "frames": 91,
+      "videosRange": 3,
+      "feedbackAndExcel": true,
+      "uploadedVideoBackupAndMigration": true,
+      "savedConfigurationUnchanged": true
+    },
+    {
+      "platform": "Mac",
+      "sourceCommit": "a8fbf10fdb1de3e5931811756a474d62b510e4b8",
+      "filesHashed": 321,
+      "runtimeVariants": 2,
+      "startup": "Linux Node only; native OS not tested",
+      "frames": 91,
+      "videosRange": 3,
+      "feedbackAndExcel": true,
+      "uploadedVideoBackupAndMigration": true,
+      "savedConfigurationUnchanged": true
+    }
+  ],
+  "transfers": [
+    {
+      "platform": "Windows",
+      "firstBytes": 93327184,
+      "secondBytes": 91870984,
+      "reassembledSha256": "afa57149f887ff56b0a911597c2b2b47835d15e88c3f68f08434ff5ee483dfcd",
+      "zipVerified": true
+    },
+    {
+      "platform": "Mac",
+      "firstBytes": 100666687,
+      "secondBytes": 98688934,
+      "reassembledSha256": "39a92ef8168fa5cd83f877944ad8b3445764aa805ec303867b2249c79826642b",
+      "zipVerified": true
+    }
+  ]
+}

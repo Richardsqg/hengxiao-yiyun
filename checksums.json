@@ -1,0 +1,18 @@
+{
+  "version": "1.4.4",
+  "platform": "Windows",
+  "sourceCommit": "a8fbf10fdb1de3e5931811756a474d62b510e4b8",
+  "completeSha256": "afa57149f887ff56b0a911597c2b2b47835d15e88c3f68f08434ff5ee483dfcd",
+  "downloads": [
+    {
+      "file": "hengxiao-yiyun-1.4.4-Windows-01.zip",
+      "bytes": 93327184,
+      "sha256": "4efc81676acbfd49ad5f9009ac36c01cdbbe7e012c1894cd24c5b15b575d0317"
+    },
+    {
+      "file": "hengxiao-yiyun-1.4.4-desktop-Windows.zip.part2",
+      "bytes": 91870984,
+      "sha256": "948a91e3c1aee3873c43fdb2fdb5d569d92c58cf46b2719cff669a8f40024d1f"
+    }
+  ]
+}
