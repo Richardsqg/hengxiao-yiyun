@@ -2,7 +2,7 @@
 set -e
 transfer_dir="$(cd "$(dirname "$0")" && pwd)"
 cd "$transfer_dir"
-trap 'transfer_status=$?; if [ "$transfer_status" -ne 0 ]; then echo "生成没有完成，请保留上方报错。原下载文件和原展馆未删除。"; fi; read -r -p "请查看上方结果，按回车关闭。"' EXIT
+trap 'transfer_status=$?; if [ "$transfer_status" -ne 0 ]; then echo "生成没有完成，请保留上方报错。原下载文件和原展馆未删除。"; fi; if [ -t 0 ]; then read -r -p "请查看上方结果，按回车关闭。"; fi' EXIT
 source "$transfer_dir/transfer-info.sh"
 if [ ! -f "$FIRST" ]; then echo '第1段文件缺失，请先将第1包ZIP全部解压。'; exit 1; fi
 echo '请选择下载的 Mac 第2段文件，不需要解压第2段。'
@@ -25,14 +25,14 @@ else
   if [ "${actual%% *}" != "$SHA256" ]; then echo '同名完整ZIP已有不同内容，未覆盖。请换一个新文件夹解压第1包后重试。'; exit 1; fi
 fi
 destination="$transfer_dir/完整部署包"
-marker="$destination/.desktop-unpacked-1.4.3"
+marker="$destination/.desktop-unpacked-${YIYUN_VERSION:-1.4.3}"
 if [ ! -f "$marker" ]; then
   if [ -e "$destination" ]; then echo '完整部署包目录已存在，但未完成解压。请保留它，换一个新文件夹解压第1包后重试。'; exit 1; fi
   echo '校验通过，正在解压完整程序……'
   /usr/bin/ditto -x -k "$COMPLETE" "$destination"
   printf '%s\n' "$SHA256" > "$marker"
 fi
-project="$destination/hengxiao-yiyun-1.4.3-desktop"
+project="$destination/${YIYUN_PROJECT_FOLDER:-hengxiao-yiyun-1.4.3-desktop}"
 echo "已完成：$project"
 echo '请在新打开的文件夹里双击 macOS_同WiFi扫码启动.command；只在电脑看时双击 macOS_启动.command。'
 echo '已有旧data需要迁移时，请在第一次启动新程序之前复制，详见“开始使用.html”。'

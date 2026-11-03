@@ -4,6 +4,9 @@ $temporary = $null
 try {
     [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
     $manifest = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'transfer-info.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $yiyunVersion = if ($manifest.version) { [string]$manifest.version } else { '1.4.3' }
+    $yiyunProjectFolder = if ($manifest.projectFolder) { [string]$manifest.projectFolder } else { 'hengxiao-yiyun-1.4.3-desktop' }
+    if ($yiyunVersion -notmatch '^\d+\.\d+\.\d+$' -or $yiyunProjectFolder -ne ('hengxiao-yiyun-' + $yiyunVersion + '-desktop')) { throw '部署包版本信息无效，未解压。' }
     $first = Join-Path $PSScriptRoot $manifest.first
     if (-not (Test-Path -LiteralPath $first -PathType Leaf)) { throw '第1段文件不完整，请先将第1包ZIP全部解压后再运行。' }
     Add-Type -AssemblyName System.Windows.Forms
@@ -40,14 +43,14 @@ try {
         throw '同名完整ZIP已有不同内容，未覆盖。请换一个新文件夹解压第1包后重试。'
     }
     $destination = Join-Path $PSScriptRoot '完整部署包'
-    $marker = Join-Path $destination '.desktop-unpacked-1.4.3'
+    $marker = Join-Path $destination ('.desktop-unpacked-' + $yiyunVersion)
     if (-not (Test-Path -LiteralPath $marker)) {
         if (Test-Path -LiteralPath $destination) { throw '完整部署包目录已存在，但未完成解压。请保留它，换一个新文件夹解压第1包后重试。' }
         Write-Host '校验通过，正在解压完整程序……'
         Expand-Archive -LiteralPath $complete -DestinationPath $destination
         Set-Content -LiteralPath $marker -Value $manifest.sha256 -Encoding ASCII
     }
-    $project = Join-Path $destination 'hengxiao-yiyun-1.4.3-desktop'
+    $project = Join-Path $destination $yiyunProjectFolder
     Write-Host ('已完成：' + $project)
     Write-Host '请在新打开的文件夹里，双击 Windows_同WiFi扫码启动.bat；只在电脑看时双击 Windows_启动.bat。'
     Write-Host '已有旧data需要迁移时，请在第一次启动新程序之前复制，详见“开始使用.html”。'
