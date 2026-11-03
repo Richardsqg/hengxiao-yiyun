@@ -1,0 +1,18 @@
+{
+  "version": "1.4.4",
+  "platform": "Mac",
+  "sourceCommit": "a8fbf10fdb1de3e5931811756a474d62b510e4b8",
+  "completeSha256": "39a92ef8168fa5cd83f877944ad8b3445764aa805ec303867b2249c79826642b",
+  "downloads": [
+    {
+      "file": "hengxiao-yiyun-1.4.4-Mac-01.zip",
+      "bytes": 100666687,
+      "sha256": "9b1bd60e1d7a7e89302828a8f17b074e60ed55a92e26d27843a6a00660835ef0"
+    },
+    {
+      "file": "hengxiao-yiyun-1.4.4-desktop-Mac.zip.part2",
+      "bytes": 98688934,
+      "sha256": "9a619ff386814a6943057d5d3dd6b6b7886c1a6a787403d83b394af32120945e"
+    }
+  ]
+}
